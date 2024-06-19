@@ -115,8 +115,8 @@
     <% end  %>
     </tbody>
 </table>        
-    
-<script>
+
+<%= javascript_tag %{
     function wfVerifyTrigger(check) {
         if (!check.checked) {
           var check_all = document.getElementById("wf_check_all");
@@ -132,4 +132,4 @@
             check = document.getElementById("wf_check_" + (++index));
         }
     }
-</script>
+} %>

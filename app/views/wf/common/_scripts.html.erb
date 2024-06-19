@@ -5,6 +5,4 @@
   <%= javascript_include_tag(Wf::Config.effects_options[:script_path]) -%>
 <% end %>
 
-<script>
-	initializeWillFilter();
-</script>
+<%= javascript_tag "initializeWillFilter();" %>
