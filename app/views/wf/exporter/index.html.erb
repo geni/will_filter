@@ -2,14 +2,14 @@
   <div style="float:right; padding-right:2px;">
     <%=link_to_function(image_tag("/wf/images/close.gif", :title=>"Close"), "wfExporter.hide()")%>
   </div>
-  
+
   Exporter
-</div>  
+</div>
 <div class="wf_exporter_container">
 	<table style="width:100%" cellpadding="0px" cellspacing="0px;">
 	    <tr>
 	        <td>
-	            <input type="checkbox" id="wf_fld_all" onClick="wfExporter.selectAllFields(this);" style="width:20px;">
+            <%= check_box_tag "wf_export_all", "0", false, :id => "wf_fld_all", :onClick => "wfExporter.selectAllFields(this);" :style => 'width:20px' %>
 	        </td>
 	        <td>
 	            <b>Name</b>
@@ -25,7 +25,8 @@
 	    </tr><% @wf_filter.model_class.columns.each_with_index do |col, index| %>
 	    <tr>
 	        <td>
-	            <input type="checkbox" id="wf_fld_chk_<%=index%>" onClick="wfExporter.selectField(this);" style="width:20px;"><input type="hidden" id="wf_fld_name_<%=index%>" value="<%=col.name%>">
+            <%= check_box_tag "wf_export_fld_#{index}", "0", false, :id => "wf_fld_chk_#{index}", :onClick => "wfExporter.selectField(this);" :style => 'width:20px' %>
+            <input type="hidden" id="wf_fld_name_<%=index%>" value="<%=col.name%>">
 	        </td>
 	        <td>
 	            <%=col.name %>

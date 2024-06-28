@@ -1,5 +1,5 @@
 <div style='vertical-align:middle; text-align:left; padding-top:4px;'>
-  <input type='radio' style='width:20px' name='wf_v<%=index%>_0' id='wf_v<%=index%>_0' onChange='wfFilter.fieldChanged(this)' value='1' <%='checked' if container.value == '1' %>> True
+  <%= radio_button_tag "wf_v#{index}_0", '1', container.value == '1', :onChange => 'wfFilter.fieldChanged(this)' %> True
   &nbsp;&nbsp;
-	<input type='radio' style='width:20px' name='wf_v<%=index%>_0' id='wf_v<%=index%>_0' onChange='wfFilter.fieldChanged(this)' value='0' <%='checked' if container.value == '0' %>> False
+  <%= radio_button_tag "wf_v#{index}_0", '0', container.value == '0', :onChange => 'wfFilter.fieldChanged(this)' %> False
 </div>
