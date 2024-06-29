@@ -1,7 +1,7 @@
 <table class='wf_values_table' cellspacing='0px' cellpadding='0px'>
 	<tr>
     <td width='49%'>
-      <%= text_field_tag "wf_v<%=index%>_0", container.sanitized_value(0), :class => 'wf_input', :onChange => 'wfFilter.fieldChanged(this)' %>
+      <%= text_field_tag "wf_v#{index}_0", container.sanitized_value(0), :class => 'wf_input', :onChange => 'wfFilter.fieldChanged(this)' %>
     </td>
 		<td width='1%'>
       <%= link_to_function image_tag('/wf/images/clock.png', :align => 'top', :title => 'select start date & time', :border => '0', :class => 'wf_calendar_trigger'), "wfCalendar.selectDateTime('wf_v#{index}_0', this)" %>
