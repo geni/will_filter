@@ -66,7 +66,31 @@ class Wf::FilterContainer
   end
 
   def is_numeric?(s)
-    s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
+    s.to_s.strip.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
 
+  def parse_date(value)
+    value = value.strip.downcase
+
+    return Date.today     if value == 'today'
+    return Date.yesterday if value == 'yesterday'
+    return Date.tomorrow  if value == 'tomorrow'
+
+    Date.parse(value)
+  rescue ArgumentError
+    nil
+  end
+
+  def parse_time(value)
+    value = value.strip.downcase
+
+    return Time.now               if value == 'now'
+    return Date.today.to_time     if value == 'today'
+    return Date.yesterday.to_time if value == 'yesterday'
+    return Date.tomorrow.to_time  if value == 'tomorrow'
+
+    Time.parse(value)
+  rescue ArgumentError
+    nil
+  end
 end

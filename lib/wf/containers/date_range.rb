@@ -35,19 +35,13 @@ class Wf::Containers::DateRange < Wf::FilterContainer
 
   def validate
     return "Start value must be provided" if @start_date.blank?
-    return "Start value must be a valid date (2008-01-01)" if date(@start_date) == nil
+    return "Start value must be a valid date (2008-01-01)" if parse_date(@start_date) == nil
     return "End value must be provided" if @end_date.blank?
-    return "End value must be a valid date (2008-01-01)" if date(@end_date) == nil
-  end
-
-  def date(dt)
-    Date.parse(dt)
-  rescue ArgumentError
-    nil
+    return "End value must be a valid date (2008-01-01)" if parse_date(@end_date) == nil
   end
 
   def sql_condition
-    return [" (#{condition.full_key} >= ? and #{condition.full_key} <= ?) ", date(@start_date), date(@end_date)] if operator == :is_in_the_range
+    return [" (#{condition.full_key} >= ? and #{condition.full_key} <= ?) ", parse_date(@start_date), parse_date(@end_date)] if operator == :is_in_the_range
   end
   
 end

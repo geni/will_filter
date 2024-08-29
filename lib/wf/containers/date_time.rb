@@ -33,9 +33,7 @@ class Wf::Containers::DateTime < Wf::FilterContainer
   end
 
   def time
-    Time.parse(value)
-  rescue ArgumentError
-    nil
+    parse_time(value)
   end
 
   def sql_condition

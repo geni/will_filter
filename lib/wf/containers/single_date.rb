@@ -37,9 +37,7 @@ class Wf::Containers::SingleDate < Wf::FilterContainer
   end
 
   def start_date_time
-    Date.parse(value).to_time
-  rescue ArgumentError
-    nil
+   parse_date(value).to_time
   end
 
   def end_date_time

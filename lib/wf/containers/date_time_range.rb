@@ -44,15 +44,11 @@ class Wf::Containers::DateTimeRange < Wf::FilterContainer
   end
 
   def start_time
-    Time.parse(start_value)
-  rescue ArgumentError
-    nil
+    parse_time(start_value)
   end
 
   def end_time
-    Time.parse(end_value)
-  rescue ArgumentError
-    nil
+    parse_time(end_value)
   end
 
   def sql_condition
