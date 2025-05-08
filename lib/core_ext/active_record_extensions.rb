@@ -21,26 +21,30 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class ActiveRecord::Base
+module Wf
+  module ActiveRecordBaseExtensions
 
-  def self.filter(opts = {})
-    if ActiveRecord::Base == self.class
-      raise Wf::FilterException.new("Cannot apply filter to the ActiveRecord::Base object")
-    end
-
-    params = opts[:params] || {}
-    
-    if opts[:filter]
-      case opts[:filter].class.name
-        when "String" then filter_class = opts[:filter].constantize
-        when "Symbol" then filter_class = opts[:filter].to_s.camelcase.constantize
-        else filter_class = opts[:filter]
+    def filter(opts = {})
+      if ActiveRecord::Base == self
+        raise Wf::FilterException.new("Cannot apply filter to the ActiveRecord::Base object")
       end
-    else
-      filter_class = Wf::Filter
+
+      params = opts[:params] || {}
+
+      if opts[:filter]
+        case opts[:filter].class.name
+          when "String" then filter_class = opts[:filter].constantize
+          when "Symbol" then filter_class = opts[:filter].to_s.camelcase.constantize
+          else filter_class = opts[:filter]
+        end
+      else
+        filter_class = Wf::Filter
+      end
+
+      filter_class.new(self).deserialize_from_params(params).results
     end
-  
-    filter_class.new(self).deserialize_from_params(params).results
-  end
-  
-end
+
+  end # module ActiveRecordBaseExtensions
+end # module Wf
+
+ActiveRecord::Base.send(:extend, Wf::ActiveRecordBaseExtensions)

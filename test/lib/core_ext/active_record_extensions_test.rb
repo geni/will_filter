@@ -2,7 +2,7 @@ require_relative '../../test_helper'
 
 TestFilter = Class.new(Wf::Filter) unless defined?(TestFilter)
 
-class FilterTest < ActiveRecord::TestCase
+class ActiveRecordBaseExtensionsTest < ActiveRecord::TestCase
 
   def setup
     @filters = [
@@ -16,7 +16,7 @@ class FilterTest < ActiveRecord::TestCase
     Wf::Filter.delete_all
   end
 
-  test 'deserialize_from_params' do
+  test 'filter' do
     params = {
       :wf_type  => 'TestFilter',
       :wf_model => 'Wf::Filter',
@@ -24,9 +24,8 @@ class FilterTest < ActiveRecord::TestCase
       'wf_o0'   => 'equals',
       'wf_v0_0' => 'one',
     }
-    filter = Wf::Filter.deserialize_from_params(params)
 
-    assert_equal [@filters.first], filter.results
+    assert_equal [@filters.first], TestFilter.filter(:params => params)
   end
 
-end # class FilterTest
+end # class ActiveRecordBaseExtensionsTest
