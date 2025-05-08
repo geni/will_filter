@@ -27,6 +27,7 @@ class Object
 end
 
 require_relative '../config/environment'
+require 'will_paginate'
 
 # create database tables
 Dir[File.expand_path(File.dirname(__FILE__) + '/../db/migrate/*.rb')].each do |file|
