@@ -1,29 +1,23 @@
-source "http://www.rubygems.org"
+source 'https://rubygems.org'
 
+# Specify your gem's dependencies in will_filter.gemspec.
 gemspec
 
-# Rails LTS sources for free Community plan
-git 'https://github.com/makandra/rails.git', :branch => '2-3-lts' do
-  gem 'rails', '~>2.3.18'
-#  gem 'actionmailer',     :require => false
-  gem 'actionpack',       :require => false
-  gem 'activerecord',     :require => false
-#  gem 'activeresource',   :require => false
-  gem 'activesupport',    :require => false
-  gem 'railties',         :require => false
-end
-
 group :development, :test do
-  gem 'method_source'
-  gem 'mocha', '0.11.4', :require => false
+  gem 'nokogiri',  :force_ruby_platform => true
+  gem 'pg'
+  gem 'propshaft'
   gem 'rake'
-  gem 'simplecov',       :require => false
-  gem 'sqlite3'
-  gem 'test-unit', '3.6.2' # >3.6.3 have problems with elapsed_time
+  gem 'simplecov', :require => false
+  gem 'test-unit'
 end
 
 group :vscode do
-  gem 'debase',         :require => false
-  gem 'ruby-debug-ide', :require => false
-  gem 'solargraph',     :require => false
+  gem 'debase',           :require => false
+  gem 'debug',            :require => false
+  gem 'rainbow',          :require => false
+  gem 'rdbg',             :require => false
+  gem 'ruby-debug-ide',   :require => false
+  gem 'ruby-lsp',         :require => false
+  gem 'solargraph',       :require => false
 end

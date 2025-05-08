@@ -1,15 +1,5 @@
-require 'test/unit'
-
-ENV['RAILS_ENV'] = 'test'
-
-module CaptureRubyWarnings
-  def warn(message)
-    return if message =~ /assigned but unused variable/
-    return if caller[0] =~ /vendor/ || message =~ /vendor/ # Ignore warnings from vendored code
-    super
-  end
-end
-Warning.extend(CaptureRubyWarnings)
+# Configure Rails Environment
+ENV["RAILS_ENV"] = "test"
 
 unless defined?($SKIP_COVERAGE)
   require 'simplecov'
@@ -28,13 +18,7 @@ class Object
   end
 end
 
-require_relative '../config/environment'
-require 'will_paginate'
-
-# create database tables
-Dir[File.expand_path(File.dirname(__FILE__) + '/../db/migrate/*.rb')].each do |file|
-  require file
-end
-
-ActiveRecord::Migration.verbose = true
-ActiveRecord::Migrator.migrate("db/migrate/")
+require_relative "../test/dummy/config/environment"
+ActiveRecord::Migrator.migrations_paths = [ File.expand_path("../test/dummy/db/migrate", __dir__) ]
+ActiveRecord::Migrator.migrations_paths << File.expand_path("../db/migrate", __dir__)
+require "rails/test_help"
