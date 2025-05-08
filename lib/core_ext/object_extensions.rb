@@ -21,14 +21,18 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Array
-  
-  def wf_filter=(filter)
-    @wf_filter = filter
-  end
-  
-  def wf_filter
-    @wf_filter
-  end
-  
-end
+module Wf
+  module ObjectExtensions
+
+    def wf_filter=(filter)
+      @wf_filter = filter
+    end
+
+    def wf_filter
+      @wf_filter
+    end
+
+  end # module ObjectExtensions
+end # module Wf
+
+Object.send(:include, Wf::ObjectExtensions)

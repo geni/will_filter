@@ -1,3 +1,5 @@
+require 'test/unit'
+
 ENV['RAILS_ENV'] = 'test'
 
 module CaptureRubyWarnings
