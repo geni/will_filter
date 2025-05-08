@@ -500,7 +500,7 @@ class Wf::Filter < ActiveRecord::Base
   # Validations
   #############################################################################
   def errors?
-   (@errors and @errors.size > 0)
+   (defined?(@errors) && @errors.size > 0)
   end
 
   def empty?
