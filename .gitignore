@@ -1,4 +1,6 @@
+.bash_history
 .bundle/
+coverage/
 pkg/
 *.sqlite3
 *.log
@@ -6,6 +8,7 @@ db/schema.rb*
 tmp/*
 log/*
 .DS_Store
+Gemfile.lock
 *.swp
 .project
 .loadpath
@@ -15,3 +18,4 @@ Thumbs.db
 .tmp*
 tmp/
 test/dummy
+vendor/bundle
