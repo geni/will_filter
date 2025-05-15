@@ -3,6 +3,8 @@ require "will_filter/engine"
 
 module WillFilter
   # Your code goes here...
+
+  FilterException = Class.new(StandardError)
 end
 
 # for backward compatability
