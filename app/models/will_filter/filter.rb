@@ -57,11 +57,11 @@ module WillFilter
     # Defaults
     #############################################################################
     def show_export_options?
-      Wf::Config.exporting_enabled?
+      WillFilter::Config.exporting_enabled?
     end
 
     def show_save_options?
-      Wf::Config.saving_enabled?
+      WillFilter::Config.saving_enabled?
     end
 
     def match
@@ -161,8 +161,8 @@ module WillFilter
       containers = container_by_sql_type(type)
       operators = {}
       containers.each do |c|
-        raise Wf::FilterException.new("Unsupported container implementation for #{c}") unless Wf::Config.containers[c]
-        container_klass = Wf::Config.containers[c].constantize
+        raise WillFilter::FilterException.new("Unsupported container implementation for #{c}") unless WillFilter::Config.containers[c]
+        container_klass = WillFilter::Config.containers[c].constantize
         container_klass.operators.each do |o|
           operators[o] = c
         end
@@ -182,7 +182,7 @@ module WillFilter
     end
 
     def sorted_operators(opers)
-      (Wf::Config.operator_order & opers.keys.collect{|o| o.to_s})
+      (WillFilter::Config.operator_order & opers.keys.collect{|o| o.to_s})
     end
 
     def first_sorted_operator(opers)
@@ -303,7 +303,7 @@ module WillFilter
       condition_key = condition_key.to_sym if condition_key.is_a?(String)
 
       opers = definition[condition_key]
-      raise Wf::FilterException.new("Invalid condition #{condition_key} for filter #{self.class.name}") unless opers
+      raise WillFilter::FilterException.new("Invalid condition #{condition_key} for filter #{self.class.name}") unless opers
       sorted_operators(opers).collect{|o| [o.to_s.gsub('_', ' '), o]}
     end
 
@@ -316,7 +316,7 @@ module WillFilter
       condition_key = condition_key.to_sym if condition_key.is_a?(String)
 
       opers = definition[condition_key]
-      raise Wf::FilterException.new("Invalid condition #{condition_key} for filter #{self.class.name}") unless opers
+      raise WillFilter::FilterException.new("Invalid condition #{condition_key} for filter #{self.class.name}") unless opers
       oper = opers[operator_key]
 
       # if invalid operator_key was passed, use first operator
@@ -355,7 +355,7 @@ module WillFilter
         operator_key = first_sorted_operator(opers)
       end
 
-      condition = Wf::FilterCondition.new(self, condition_key, operator_key, container_for(condition_key, operator_key), values)
+      condition = WillFilter::FilterCondition.new(self, condition_key, operator_key, container_for(condition_key, operator_key), values)
       @conditions.insert(index, condition)
     end
 
@@ -515,7 +515,7 @@ module WillFilter
     end
 
     def valid_format?
-      Wf::Config.default_export_formats.include?(format.to_s)
+      WillFilter::Config.default_export_formats.include?(format.to_s)
     end
 
     def required_conditions_met?
@@ -559,7 +559,7 @@ module WillFilter
             sql_condition = condition.container.sql_condition
 
             unless sql_condition
-              raise Wf::FilterException.new("Unsupported operator #{condition.operator_key} for container #{condition.container.class.name}")
+              raise WillFilter::FilterException.new("Unsupported operator #{condition.operator_key} for container #{condition.container.class.name}")
             end
 
             if all_sql_conditions[0].size > 0
@@ -645,16 +645,16 @@ module WillFilter
           conditions = ["model_class_name = ?", self.model_class_name]
         end
 
-        if Wf::Config.user_filters_enabled?
+        if WillFilter::Config.user_filters_enabled?
           conditions[0] << " and user_id = ? "
-          if Wf::Config.current_user and Wf::Config.current_user.id
-            conditions << Wf::Config.current_user.id
+          if WillFilter::Config.current_user and WillFilter::Config.current_user.id
+            conditions << WillFilter::Config.current_user.id
           else
             conditions << "0"
           end
         end
 
-        user_filters = Wf::Filter.find(:all, :conditions => conditions)
+        user_filters = WillFilter::Filter.find(:all, :conditions => conditions)
 
         if user_filters.size > 0
           filters << ["-- Select Saved Filter --", "-2"] if include_default
@@ -716,8 +716,8 @@ module WillFilter
       load_default_filter(key)
       return self unless empty?
 
-      filter = Wf::Filter.find_by_id(key_or_id.to_i)
-      raise Wf::FilterException.new("Invalid filter key #{key_or_id.to_s}") if filter.nil?
+      filter = WillFilter::Filter.find_by_id(key_or_id.to_i)
+      raise WillFilter::FilterException.new("Invalid filter key #{key_or_id.to_s}") if filter.nil?
       filter
     end
 
@@ -727,7 +727,7 @@ module WillFilter
     def export_formats
       formats = []
       formats << ["-- Generic Formats --", -1]
-      Wf::Config.default_export_formats.each do |frmt|
+      WillFilter::Config.default_export_formats.each do |frmt|
         formats << [frmt, frmt]
       end
       if custom_formats.size > 0

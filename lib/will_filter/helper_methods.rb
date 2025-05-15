@@ -21,7 +21,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-module Wf::HelperMethods
+module WillFilter::HelperMethods
 
   def will_filter(results)
     render(:partial => "/wf/filter/container", :locals => {:wf_filter => results.wf_filter})
@@ -30,16 +30,16 @@ module Wf::HelperMethods
   def will_filter_scripts_tag
     render(:partial => "/wf/common/scripts")
   end
-  
+
   def will_filter_table_tag(results, opts = {})
     opts[:filtered] = true if opts[:filtered].nil?
-    
+
     if opts[:filtered]
       filter = results.wf_filter
       opts[:columns] ||= filter.model_column_keys
     else
       opts[:columns] ||= obj.attribute_names.sort
-    end  
+    end
 
     render(:partial => "/wf/common/results_table", :locals => {:results => results, :filter => filter, :opts => opts})
   end
@@ -59,5 +59,5 @@ module Wf::HelperMethods
     opts[:value_style]  ||= "text-align:left"
     render(:partial => "/wf/common/details_table", :locals => {:object => obj, :opts => opts})
   end
-  
+
 end

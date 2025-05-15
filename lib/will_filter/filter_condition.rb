@@ -30,7 +30,7 @@ module WillFilter
       @filter     = filter
       @key        = key
       @operator   = operator
-      @container  = Wf::Config.containers[container_class].constantize.new(filter, self, operator, values)
+      @container  = WillFilter::Config.containers[container_class].constantize.new(filter, self, operator, values)
     end
 
     def validate
