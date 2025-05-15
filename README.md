@@ -23,10 +23,23 @@ gem 'will_filter', :git => 'https://github.com/geni/will_filter.git', :branch =>
 
 ## Testing
 
+### Running Automated Tests
+
 ```sh
 # run all tests and generate coverage report in coverage subdir
 bundle exec rails db:create
 bundle exec rails test
+```
+
+### Manual Integration Testing
+
+```sh
+# populate dummy app database
+bundle exec rails db:create
+bundle exec rails app:db:seed
+
+# Spin up the server
+bundle exec rails server -b 0.0.0.0
 ```
 
 ## Upgrading

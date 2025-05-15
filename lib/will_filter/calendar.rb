@@ -94,7 +94,7 @@ module WillFilter
 
     def move(delta)
       return self if delta.blank? or delta == 0
-      WillFilter::Calendar.new(selected_date, start_date + delta, show_time?, mode)
+      Calendar.new(selected_date, start_date + delta, show_time?, mode)
     end
 
     def title

@@ -7,6 +7,7 @@ group :development, :test do
   gem 'nokogiri',  :force_ruby_platform => true
   gem 'pg'
   gem 'propshaft'
+  gem 'puma'
   gem 'rake'
   gem 'simplecov', :require => false
   gem 'test-unit'

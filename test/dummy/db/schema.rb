@@ -10,9 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2009_07_30_070119) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_15_182056) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "foos", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name", null: false
+  end
 
   create_table "will_filter_filters", id: :serial, force: :cascade do |t|
     t.string "type"

@@ -13,6 +13,7 @@ Gem::Specification.new do |gem|
     Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
   end
 
+  gem.add_dependency 'csv'
   gem.add_dependency 'rails', '~> 8.0.2'
   gem.add_dependency 'will_paginate'
 end

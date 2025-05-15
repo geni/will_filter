@@ -2,7 +2,7 @@ require 'test_helper'
 
 TestFilter = Class.new(WillFilter::Filter) unless defined?(TestFilter)
 
-class ApplicationRecordTest < ActiveSupport::TestCase
+class WillFilterMethodsTest < ActiveSupport::TestCase
 
   def setup
     @filters = [
@@ -23,4 +23,4 @@ class ApplicationRecordTest < ActiveSupport::TestCase
     assert_equal [@filters.first], TestFilter.filter(:params => params)
   end
 
-end # class ApplicationRecordTest
+end # class WillFilterMethodsTest

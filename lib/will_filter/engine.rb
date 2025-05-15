@@ -1,11 +1,19 @@
 module WillFilter
   class Engine < ::Rails::Engine
     isolate_namespace WillFilter
-    config.eager_load_paths   << root.join('lib')
+
+    config.eager_load_paths << root.join('lib')
+    config.active_record.yaml_column_permitted_classes = [HashWithIndifferentAccess, Symbol]
+
+    # invoked whenver classes are reloaded
+    config.to_prepare do
+      if defined?(::ApplicationRecord)
+        ::ApplicationRecord.include(WillFilter::Concerns::WillFilterMethods)
+      end
+    end
+
   end # class Engine
 end # module WillFilter
 
-# config.eager_load_paths << root.join('lib/will_filter/core_ext') Isn't working
-# I must not understand it well enough
-# So I'm loading them manually
 require 'will_filter/object_extensions'
+require 'will_paginate'

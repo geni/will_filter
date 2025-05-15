@@ -6,6 +6,3 @@ module WillFilter
 
   FilterException = Class.new(StandardError)
 end
-
-# for backward compatability
-Wf = WillFilter unless defined?(Wf)

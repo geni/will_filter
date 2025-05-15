@@ -1,0 +1,11 @@
+
+<%= stylesheet_link_tag('will_filter/will_filter.css', :nonce => true) %>
+<%= javascript_include_tag('will_filter/will_filter.js', :nonce => true) %>
+
+<% if WillFilter::Config.effects_options[:enabled] %>
+  <%= javascript_include_tag(WillFilter::Config.effects_options[:script_path]) %>
+<% end %>
+
+<%= javascript_tag %{
+  initializeWillFilter();
+} %>

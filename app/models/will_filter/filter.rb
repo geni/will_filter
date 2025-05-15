@@ -21,15 +21,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-require 'will_paginate/active_record'
-
 module WillFilter
   class Filter < ApplicationRecord
 
     JOIN_NAME_INDICATOR = '>'
 
+#TODO Remove
 #    self.table_name = 'wf_filters'
-    serialize :data, :type => Hash, :coder => YAML
+    serialize :data, :type => HashWithIndifferentAccess, :coder => YAML
 
     #############################################################################
     # Basics
@@ -43,12 +42,12 @@ module WillFilter
       super.tap {|ii| ii.conditions = self.conditions.dup}
     end
 
-    def before_save
+    before_save do
       self.data = serialize_to_params
       self.type = self.class.name
     end
 
-    def after_find
+    after_find do
       @errors = {}
       deserialize_from_params(self.data)
     end
@@ -57,11 +56,11 @@ module WillFilter
     # Defaults
     #############################################################################
     def show_export_options?
-      WillFilter::Config.exporting_enabled?
+      Config.exporting_enabled?
     end
 
     def show_save_options?
-      WillFilter::Config.saving_enabled?
+      Config.saving_enabled?
     end
 
     def match
@@ -152,8 +151,8 @@ module WillFilter
     end
 
     def container_by_sql_type(type)
-      raise WillFilter::FilterException.new("Unsupported data type #{type}") unless WillFilter::Config.data_types[type]
-      WillFilter::Config.data_types[type]
+      raise FilterException.new("Unsupported data type #{type}") unless Config.data_types[type]
+      Config.data_types[type]
     end
 
     def default_condition_definition_for(name, sql_data_type)
@@ -161,8 +160,8 @@ module WillFilter
       containers = container_by_sql_type(type)
       operators = {}
       containers.each do |c|
-        raise WillFilter::FilterException.new("Unsupported container implementation for #{c}") unless WillFilter::Config.containers[c]
-        container_klass = WillFilter::Config.containers[c].constantize
+        raise FilterException.new("Unsupported container implementation for #{c}") unless Config.containers[c]
+        container_klass = Config.containers[c].constantize
         container_klass.operators.each do |o|
           operators[o] = c
         end
@@ -182,7 +181,7 @@ module WillFilter
     end
 
     def sorted_operators(opers)
-      (WillFilter::Config.operator_order & opers.keys.collect{|o| o.to_s})
+      (Config.operator_order & opers.keys.collect{|o| o.to_s})
     end
 
     def first_sorted_operator(opers)
@@ -303,7 +302,7 @@ module WillFilter
       condition_key = condition_key.to_sym if condition_key.is_a?(String)
 
       opers = definition[condition_key]
-      raise WillFilter::FilterException.new("Invalid condition #{condition_key} for filter #{self.class.name}") unless opers
+      raise FilterException.new("Invalid condition #{condition_key} for filter #{self.class.name}") unless opers
       sorted_operators(opers).collect{|o| [o.to_s.gsub('_', ' '), o]}
     end
 
@@ -316,7 +315,7 @@ module WillFilter
       condition_key = condition_key.to_sym if condition_key.is_a?(String)
 
       opers = definition[condition_key]
-      raise WillFilter::FilterException.new("Invalid condition #{condition_key} for filter #{self.class.name}") unless opers
+      raise FilterException.new("Invalid condition #{condition_key} for filter #{self.class.name}") unless opers
       oper = opers[operator_key]
 
       # if invalid operator_key was passed, use first operator
@@ -355,7 +354,7 @@ module WillFilter
         operator_key = first_sorted_operator(opers)
       end
 
-      condition = WillFilter::FilterCondition.new(self, condition_key, operator_key, container_for(condition_key, operator_key), values)
+      condition = FilterCondition.new(self, condition_key, operator_key, container_for(condition_key, operator_key), values)
       @conditions.insert(index, condition)
     end
 
@@ -515,7 +514,7 @@ module WillFilter
     end
 
     def valid_format?
-      WillFilter::Config.default_export_formats.include?(format.to_s)
+      Config.default_export_formats.include?(format.to_s)
     end
 
     def required_conditions_met?
@@ -549,9 +548,7 @@ module WillFilter
         if errors?
           all_sql_conditions = [' 1 = 2 ']
         else
-# This code causes a warning about frozen string literals
-# TODO: Understand and cleanup
-          all_sql_conditions = ['']
+          all_sql_conditions = [String.new]
           0.upto(size - 1) do |index|
             condition = condition_at(index)
             next if custom_condition?(condition)
@@ -573,7 +570,7 @@ module WillFilter
           end
         end
 
-        all_sql_conditions
+        all_sql_conditions[0].empty? ? nil : all_sql_conditions
       end
     end
 
@@ -594,7 +591,10 @@ module WillFilter
     end
 
     def debug_conditions(conds)
+      return if conds.nil?
+
       all_conditions = []
+
       conds.each_with_index do |c, i|
         cond = ""
         if i == 0
@@ -618,6 +618,7 @@ module WillFilter
 
         all_conditions << cond
       end
+
       all_conditions
     end
 
@@ -645,16 +646,16 @@ module WillFilter
           conditions = ["model_class_name = ?", self.model_class_name]
         end
 
-        if WillFilter::Config.user_filters_enabled?
+        if Config.user_filters_enabled?
           conditions[0] << " and user_id = ? "
-          if WillFilter::Config.current_user and WillFilter::Config.current_user.id
-            conditions << WillFilter::Config.current_user.id
+          if Config.current_user and Config.current_user.id
+            conditions << Config.current_user.id
           else
             conditions << "0"
           end
         end
 
-        user_filters = WillFilter::Filter.find(:all, :conditions => conditions)
+        user_filters = Filter.where(conditions)
 
         if user_filters.size > 0
           filters << ["-- Select Saved Filter --", "-2"] if include_default
@@ -716,8 +717,8 @@ module WillFilter
       load_default_filter(key)
       return self unless empty?
 
-      filter = WillFilter::Filter.find_by_id(key_or_id.to_i)
-      raise WillFilter::FilterException.new("Invalid filter key #{key_or_id.to_s}") if filter.nil?
+      filter = Filter.where(:id => key_or_id.to_i).first
+      raise FilterException.new("Invalid filter key #{key_or_id.to_s}") if filter.nil?
       filter
     end
 
@@ -727,7 +728,7 @@ module WillFilter
     def export_formats
       formats = []
       formats << ["-- Generic Formats --", -1]
-      WillFilter::Config.default_export_formats.each do |frmt|
+      Config.default_export_formats.each do |frmt|
         formats << [frmt, frmt]
       end
       if custom_formats.size > 0
@@ -793,6 +794,7 @@ module WillFilter
 
     def process_custom_conditions(objects)
       filtered = []
+
       objects.each do |obj|
         condition_flags = []
 
@@ -809,25 +811,18 @@ module WillFilter
 
         filtered << obj
       end
+
       filtered
     end
 
     def results
       @results ||= begin
         handle_empty_filter!
-#TODO: dry this up
-        if custom_conditions?
-          recs = model_class.where(sql_conditions)
-                            .joins(joins)
-                            .order(order_clause)
-          recs = process_custom_conditions(recs)
-          recs = recs.paginate(:page => page, :per_page => per_page)
-        else
-          recs = model_class.where(sql_conditions)
-                            .joins(joins)
-                            .order(order_clause)
-                            .paginate(:page => page, :per_page => per_page)
-        end
+
+        recs = model_class.where(sql_conditions).joins(joins).order(order_clause)
+        recs = process_custom_conditions(recs) if custom_conditions?
+        recs = recs.paginate(:page => page, :per_page => per_page)
+
         recs.wf_filter = self
         recs
       end
@@ -835,7 +830,8 @@ module WillFilter
 
     # sums up the column for the given conditions
     def sum(column_name)
-      model_class.sum(column_name, :conditions => sql_conditions)
+      model_class.where(sql_conditions)
+                 .sum(column_name)
     end
 
   end # class Filter
