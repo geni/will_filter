@@ -35,8 +35,10 @@ bundle exec rails test
 git checkout -b rails-x.y.z
 gem install rails-x.y.z
 
-# generate new engine subdir. copy files over and test.
+# generate new engine subdir.
 rails plugin new will_filter --rc=.railsrc
+
+# copy files over and test.
 ```
 
 This will create a new engine in the will_filter subdirectory.
