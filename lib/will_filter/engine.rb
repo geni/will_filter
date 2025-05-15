@@ -1,13 +1,7 @@
 module WillFilter
   class Engine < ::Rails::Engine
     isolate_namespace WillFilter
-
-# TODO: Remove
-#initializer('zeitwerk') { |app| app.autoloaders.main.log! }
-
-#    config.autoload_paths   << root.join('lib')
     config.eager_load_paths   << root.join('lib')
-
   end # class Engine
 end # module WillFilter
 
@@ -15,4 +9,3 @@ end # module WillFilter
 # I must not understand it well enough
 # So I'm loading them manually
 require 'will_filter/object_extensions'
-require 'will_filter/active_record_extensions'
