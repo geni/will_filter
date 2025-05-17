@@ -5,4 +5,9 @@ module WillFilter
   # Your code goes here...
 
   FilterException = Class.new(StandardError)
-end
+
+  def self.configure
+    yield WillFilter::Config
+  end
+
+end # module WillFilter

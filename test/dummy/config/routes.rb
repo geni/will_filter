@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount WillFilter::Engine => "/will_filter"
+  mount WillFilter::Engine => "/wf"
 
   root 'foos#index'
 end

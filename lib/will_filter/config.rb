@@ -36,14 +36,6 @@ module WillFilter
       Thread.current[:current_user] = nil
     end
 
-    def self.load_yml(file_path)
-      file = "#{Rails.root}/#{file_path}"
-      file = "#{WillFilter::Engine.root}/#{file_path}" unless File.exist?(file)
-
-      yml = YAML.load_file(file, :aliases => true)[Rails.env]
-      HashWithIndifferentAccess.new(yml)
-    end
-
     def self.config
       @config ||= load_yml("config/will_filter/config.yml")
     end
@@ -103,5 +95,25 @@ module WillFilter
     def self.default_export_formats
       export_options[:default_formats]
     end
+
+    def self.table_name_prefix=(value)
+      @table_name_prefix = value
+      WillFilter::Filter.table_name = "#{value}_filters"
+    end
+
+    def self.table_name_prefix
+      @table_name_prefix ||= 'will_filter'
+    end
+
+  private
+
+    def self.load_yml(file_path)
+      file = "#{Rails.root}/#{file_path}"
+      file = "#{WillFilter::Engine.root}/#{file_path}" unless File.exist?(file)
+
+      yml = YAML.load_file(file, :aliases => true)[Rails.env]
+      HashWithIndifferentAccess.new(yml)
+    end
+
   end # class Config
 end # module WillFilter

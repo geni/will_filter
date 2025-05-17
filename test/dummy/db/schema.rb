@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_15_182056) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_15_182061) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -18,6 +18,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_15_182056) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name", null: false
+  end
+
+  create_table "wf_filters", id: :serial, force: :cascade do |t|
+    t.string "type"
+    t.string "name"
+    t.text "data"
+    t.integer "user_id"
+    t.string "model_class_name"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+    t.index ["user_id"], name: "index_wf_filters_on_user_id"
   end
 
   create_table "will_filter_filters", id: :serial, force: :cascade do |t|

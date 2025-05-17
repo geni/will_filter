@@ -27,7 +27,7 @@ gem 'will_filter', :git => 'https://github.com/geni/will_filter.git', :branch =>
 
 ```sh
 # run all tests and generate coverage report in coverage subdir
-bundle exec rails db:create
+bundle exec rails db:create db:migrate
 bundle exec rails test
 ```
 

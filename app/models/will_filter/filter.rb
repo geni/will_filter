@@ -26,8 +26,6 @@ module WillFilter
 
     JOIN_NAME_INDICATOR = '>'
 
-#TODO Remove
-#    self.table_name = 'wf_filters'
     serialize :data, :type => HashWithIndifferentAccess, :coder => YAML
 
     #############################################################################
