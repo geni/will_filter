@@ -15,5 +15,5 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'csv'
   gem.add_dependency 'rails', '~> 8.0.2'
-  gem.add_dependency 'will_paginate'
+  gem.add_dependency 'will_paginate', '~>4.0.0'
 end
