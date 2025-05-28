@@ -12,6 +12,8 @@ bundle config --local clean true
 bundle config --local path vendor/bundle
 bundle config --local without vscode
 
+rm Gemfile.lock
 bundle install
+
 bundle exec rails db:create db:migrate
 bundle exec rails test
