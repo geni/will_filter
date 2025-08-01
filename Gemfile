@@ -5,7 +5,7 @@ gemspec
 
 group :development, :test do
   gem 'nokogiri',  :force_ruby_platform => true
-  gem 'pg'
+  gem 'pg', '~>1.5.0' # 1.6 requires GLIBC 2.29 which CentOS 8 Stream doesn't have
   gem 'propshaft'
   gem 'puma'
   gem 'rake'
