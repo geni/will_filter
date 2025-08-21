@@ -14,11 +14,30 @@ http://github.com/berk/will_filter_examples
 
 ## Installation
 
-Add the following line to Gemfile:
+Add the following lines to the specified files:
 
 ```ruby
 # Gemfile
 gem 'will_filter', :git => 'https://github.com/geni/will_filter.git', :branch => 'rails-8.0.x'
+
+# config/routes.rb
+Rails.application.routes.draw do
+  mount WillFilter::Engine => '/foo'
+  ...
+end
+
+# app/views/layouts/application.html.erb
+...
+<%= will_filter_scripts_tag %>
+...
+```
+
+### Sprockets changes
+
+If you're using the sprockets asset pipeline add the following line to app/assets/config/manifest.js.
+
+```javascript
+//= link will_filter
 ```
 
 ## Testing
