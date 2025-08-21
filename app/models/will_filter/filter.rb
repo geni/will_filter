@@ -617,7 +617,7 @@ module WillFilter
         all_conditions << cond
       end
 
-      all_conditions
+      all_conditions.join(' ').html_safe
     end
 
     def debug_sql_conditions
