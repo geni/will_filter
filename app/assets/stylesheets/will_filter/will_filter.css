@@ -121,7 +121,7 @@
 
   Licensed under GPL and MIT.
 */
-.wf_pcb, .wf_pcb span                         {background: url('buttons.png') no-repeat; height: 23px; line-height: 23px; padding: 3px 0 7px 0; }
+.wf_pcb, .wf_pcb span                         {background: url('will_filter/buttons.png') no-repeat; height: 23px; line-height: 23px; padding: 3px 0 7px 0; }
 .wf_pcb, a.wf_pcb:link, a.wf_pcb:visited      {color: #333; font-size: 12px; font-style:bold; font-family:arial; padding-left: 14px; text-decoration: none !important; }
 
 /* ie 6 hack */
