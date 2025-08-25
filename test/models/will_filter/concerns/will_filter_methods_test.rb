@@ -20,7 +20,7 @@ class WillFilterMethodsTest < ActiveSupport::TestCase
       'wf_v0_0' => 'one',
     }
 
-    assert_equal [@filters.first], TestFilter.filter(:params => params)
+    assert_equal [@filters.first], TestFilter.filter(:params => params).results
   end
 
 end # class WillFilterMethodsTest

@@ -22,7 +22,7 @@ module WillFilter
             filter_class = WillFilter::Filter
           end
 
-          filter_class.new(self).deserialize_from_params(params).results
+          filter_class.new(self).deserialize_from_params(params)
         end
 
       end # module ClassMethods
