@@ -11,6 +11,23 @@ class FilterTest < ActiveSupport::TestCase
     ]
   end
 
+  test 'new with no parameter' do
+    filter = TestFilter.new
+    assert_equal 'Test', filter.model_class.name
+  end
+
+  test 'new with invalid class' do
+    assert_raise RuntimeError do
+      InvalidKlassFilter = Class.new(WillFilter::Filter)
+      filter = InvalidKlassFilter.new
+    end
+  end
+
+  test 'new with valid class' do
+    filter = TestFilter.new(WillFilter::Filter)
+    assert_equal 'WillFilter::Filter', filter.model_class.name
+  end
+
   test 'deserialize_from_params' do
     params = {
       :wf_type  => 'TestFilter',
@@ -19,7 +36,7 @@ class FilterTest < ActiveSupport::TestCase
       'wf_o0'   => 'equals',
       'wf_v0_0' => 'one',
     }
-    filter = WillFilter::Filter.deserialize_from_params(params)
+    filter = TestFilter.deserialize_from_params(params)
 
     assert_equal [@filters.first], filter.results
   end
@@ -29,7 +46,7 @@ class FilterTest < ActiveSupport::TestCase
       :wf_type  => 'TestFilter',
       :wf_model => 'WillFilter::Filter',
     }
-    filter = WillFilter::Filter.deserialize_from_params(params)
+    filter = TestFilter.deserialize_from_params(params)
 
     assert_equal 2, filter.results.size
   end
@@ -39,7 +56,7 @@ class FilterTest < ActiveSupport::TestCase
       :wf_type  => 'TestFilter',
       :wf_model => 'WillFilter::Filter',
     }
-    filter = WillFilter::Filter.deserialize_from_params(params)
+    filter = TestFilter.deserialize_from_params(params)
 
     expected = @filters.reduce(0) {|sum, ii| sum + ii.id }
     assert_equal expected, filter.sum(:id)
@@ -54,10 +71,10 @@ class FilterTest < ActiveSupport::TestCase
       'wf_o0'   => 'equals',
       'wf_v0_0' => 'one',
     }
-    filter = WillFilter::Filter.deserialize_from_params(params)
+    filter = TestFilter.deserialize_from_params(params)
     filter.save!
 
-    loaded_filter = WillFilter::Filter.new.load_filter!(filter.id)
+    loaded_filter = TestFilter.new.load_filter!(filter.id)
 
     assert_equal filter.id, loaded_filter.id
     assert_equal filter.data, loaded_filter.data

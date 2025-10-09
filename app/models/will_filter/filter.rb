@@ -31,9 +31,20 @@ module WillFilter
     #############################################################################
     # Basics
     #############################################################################
-    def initialize(model_class)
+    def initialize(model_class=nil)
       super()
-      self.model_class_name = model_class.to_s
+
+      if model_class
+        self.model_class_name = model_class.to_s
+
+      elsif self.class.name =~ /(.+)Filter/
+        model_class = $1.constantize rescue nil
+        raise "Cannot determine model class for #{name}!" if model_class.nil?
+        self.model_class_name = model_class.to_s
+
+      else
+        raise "Cannot determine model class for #{name}!"
+      end
     end
 
     def dup
@@ -523,15 +534,25 @@ module WillFilter
     end
 
     def validate!
-      @errors = {}
+      errors.clear
+
       0.upto(size - 1) do |index|
         condition = condition_at(index)
         err = condition.validate
-        @errors[index] = err if err
+        errors[index] = err if err
       end
 
       unless required_conditions_met?
-        @errors[:filter] = "Filter must contain at least one of the following conditions: #{required_condition_keys.join(", ")}"
+        errors[:filter] = "Filter must contain at least one of the following conditions: #{required_condition_keys.join(", ")}"
+      end
+
+      unless errors?
+        conditions.each do |condition|
+          method = "validate_#{condition.key}"
+          if respond_to?(method, true)
+            send(method, condition)
+          end
+        end
       end
 
       errors?
