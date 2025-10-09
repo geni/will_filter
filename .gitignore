@@ -1,5 +1,5 @@
 .bash_history
-.bundle/
+.bundle
 coverage/
 pkg/
 *.sqlite3
@@ -18,4 +18,4 @@ Thumbs.db
 .tmp*
 tmp/
 test/dummy
-vendor/bundle
+vendor
