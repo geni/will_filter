@@ -1,5 +1,5 @@
 .bash_history
-.bundle/
+.bundle
 coverage/
 pkg/
 *.sqlite3
@@ -17,4 +17,4 @@ Gemfile.lock
 Thumbs.db
 .tmp*
 tmp/
-vendor/bundle
+vendor
