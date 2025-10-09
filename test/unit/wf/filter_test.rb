@@ -16,6 +16,23 @@ class FilterTest < ActiveRecord::TestCase
     Wf::Filter.delete_all
   end
 
+  test 'new with no parameter' do
+    filter = TestFilter.new
+    assert_equal 'Test', filter.model_class.name
+  end
+
+  test 'new with invalid class' do
+    assert_raise RuntimeError do
+      InvalidKlassFilter = Class.new(Wf::Filter)
+      filter = InvalidKlassFilter.new
+    end
+  end
+
+  test 'new with valid class' do
+    filter = TestFilter.new(Wf::Filter)
+    assert_equal 'Wf::Filter', filter.model_class.name
+  end
+
   test 'deserialize_from_params' do
     params = {
       :wf_type  => 'TestFilter',
