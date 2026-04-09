@@ -17,7 +17,7 @@ group :vscode do
   # VSCode ruby-lsp plugin uses these.
   # Normally they're installed by the plugin using .ruby-lsp/Gemfile
   # If we don't put them here, they'll be removed if we run bundle install
-  gem 'prism', '~> 1.9.0',    :require => false
+#  gem 'prism', '~> 1.9.0',    :require => false
   gem 'rbs',                  :require => false
   gem 'ruby-lsp', '>=0.18.0', :require => false
   gem 'ruby-lsp-rails',       :require => false
