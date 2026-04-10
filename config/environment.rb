@@ -1,11 +1,16 @@
 require_relative 'boot'
 
-Rails::Initializer.run do |config|
-  config.time_zone = 'UTC'
-  config.rails_lts_options = { :default => :compatible}
+# Rails 3.0+ uses application.rb
+if defined?(Rails::Application)
+  require_relative 'application'
+else
+  # Rails 2.3 initialization
+  Rails::Initializer.run do |config|
+    config.time_zone = 'UTC'
 
-  config.active_record.yaml_column_permitted_classes = %w{
-    HashWithIndifferentAccess
-    Symbol
-  }
+    # Rails 2.3 LTS specific options
+    if config.respond_to?(:rails_lts_options)
+      config.rails_lts_options = { :default => :compatible}
+    end
+  end
 end

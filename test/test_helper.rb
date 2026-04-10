@@ -11,13 +11,17 @@ module CaptureRubyWarnings
 end
 Warning.extend(CaptureRubyWarnings)
 
-unless defined?($SKIP_COVERAGE)
-  require 'simplecov'
-  SimpleCov.start do
-    add_filter 'config'
-    add_filter 'db'
-    add_filter 'test'
-    add_filter 'vendor'
+unless ENV.fetch('SKIP_COVERAGE', false)
+  begin
+    require 'simplecov'
+    SimpleCov.start do
+      add_filter 'config'
+      add_filter 'db'
+      add_filter 'test'
+      add_filter 'vendor'
+    end
+  rescue LoadError
+    # SimpleCov not available (Rails 2.3), skip code coverage
   end
 end
 
@@ -32,8 +36,12 @@ require_relative '../config/environment'
 require 'will_paginate'
 
 # create database tables
-Dir[File.expand_path(File.dirname(__FILE__) + '/../db/migrate/*.rb')].each do |file|
-  require file
+# In Rails 2.3, we need to require migrations manually
+# In Rails 3+, Migrator handles this
+if defined?(ActiveRecord::VERSION) && ActiveRecord::VERSION::MAJOR < 3
+  Dir[File.expand_path(File.dirname(__FILE__) + '/../db/migrate/*.rb')].each do |file|
+    require file
+  end
 end
 
 ActiveRecord::Migration.verbose = true

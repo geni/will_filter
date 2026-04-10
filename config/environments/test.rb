@@ -2,26 +2,30 @@
 
 require 'pp'
 
-# The test environment is used exclusively to run your application's
-# test suite.  You never need to work with it otherwise.  Remember that
-# your test database is "scratch space" for the test suite and is wiped
-# and recreated between test runs.  Don't rely on the data there!
-config.cache_classes = true
+# This file is evaluated in the context where 'config' variable is available (Rails 2.3)
+# or needs to reference Rails.application.config (Rails 3+)
+# We check if 'config' is defined to determine which Rails version we're in
 
-# Log error messages when you accidentally call methods on nil.
-config.whiny_nils = true
+if defined?(config)
+  # Rails 2.3 - config variable is available
+  config.cache_classes = true
+  config.whiny_nils = true if config.respond_to?(:whiny_nils=)
 
-# Show full error reports and disable caching
-config.action_controller.consider_all_requests_local = true
-config.action_controller.perform_caching             = false
-config.action_view.cache_template_loading            = true
+  if config.respond_to?(:action_controller)
+    config.action_controller.consider_all_requests_local = true
+    config.action_controller.perform_caching             = false
+    config.action_controller.allow_forgery_protection    = false
+    config.action_controller.session = { :key => "_test_session", :secret => "218d878f47b437169e7de9975d2e1286" }
+  end
 
-# Disable request forgery protection in test environment
-config.action_controller.allow_forgery_protection    = false
+  if config.respond_to?(:action_view)
+    config.action_view.cache_template_loading = true
+  end
 
-# Tell Action Mailer not to deliver emails to the real world.
-# The :test delivery method accumulates sent emails in the
-# ActionMailer::Base.deliveries array.
-config.action_mailer.delivery_method = :test
-
-config.action_controller.session = { :key => "_test_session", :secret => "218d878f47b437169e7de9975d2e1286" }
+  if config.respond_to?(:action_mailer)
+    config.action_mailer.delivery_method = :test
+  end
+else
+  # Rails 3+ - config variable not available, skip environment-specific config
+  # The test will load with defaults
+end
