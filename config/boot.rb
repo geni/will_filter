@@ -36,16 +36,6 @@ module Rails
   class Boot
     def run
       load_initializer
-
-      # In Rails 3+, Initializer.run is a deprecation warning that takes no args
-      # In Rails 2.3, it takes an argument. We try/rescue to handle both.
-      if defined?(Rails::Initializer)
-        begin
-          Rails::Initializer.run(:set_load_path)
-        rescue ArgumentError
-          # Rails 3+ - the Initializer is a deprecation stub, skip it
-        end
-      end
     end
   end
 
@@ -62,20 +52,14 @@ module Rails
       self.class.load_rubygems
       load_rails_gem
 
-      # Rails 3+ uses a different boot mechanism
-      begin
-        require 'initializer'
-      rescue LoadError
-        # If initializer doesn't exist, we're on Rails 3+
-        # Patch Rails 3.0 gem files for Ruby 2.7+ compatibility before requiring rails
-        patch_rails_30_for_ruby_27
+      # Patch Rails 3.0 gem files for Ruby 2.7+ compatibility before requiring rails
+      patch_rails_30_for_ruby_27
 
-        require 'rails'
+      require 'rails'
 
-        # Load Ruby 2.7 compatibility patches for Rails 3.0 after rails loads
-        rails_30_compat = File.expand_path('../../lib/core_ext/rails_30_ruby_27_compat', __FILE__)
-        require rails_30_compat if File.exist?("#{rails_30_compat}.rb")
-      end
+      # Load Ruby 2.7 compatibility patches for Rails 3.0 after rails loads
+      rails_30_compat = File.expand_path('../../lib/core_ext/rails_30_ruby_27_compat', __FILE__)
+      require rails_30_compat if File.exist?("#{rails_30_compat}.rb")
     end
 
     def patch_rails_30_for_ruby_27

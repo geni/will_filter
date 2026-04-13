@@ -1,11 +1,14 @@
 #!/bin/sh
 
-bundle config --local build.sqlite3 "--enable-system-libraries"
-bundle config --local clean true
-bundle config --local path vendor/bundle
-bundle config --local without vscode
+# Rails 3.0.20 requires bundler ~> 1.0, so use bundler 1.17.3
+BUNDLER="bundle _1.17.3_"
 
-bundle install
+$BUNDLER config --local build.sqlite3 "--enable-system-libraries"
+$BUNDLER config --local clean true
+$BUNDLER config --local path vendor/bundle
+$BUNDLER config --local without vscode
 
-rm db/test.sqlite3
-bundle exec rake test
+$BUNDLER install
+
+rm -f db/test.sqlite3
+$BUNDLER exec rake test
