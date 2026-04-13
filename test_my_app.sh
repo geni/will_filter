@@ -8,6 +8,8 @@ $BUNDLER config --local clean true
 $BUNDLER config --local path vendor/bundle
 $BUNDLER config --local without vscode
 
+# Bundler versions may change between builds
+rm Gemfile.lock
 $BUNDLER install
 
 rm -f db/test.sqlite3
