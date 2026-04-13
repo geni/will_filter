@@ -24,9 +24,17 @@ rm -rf vendor/bundle
 bundle install
 next bundle install
 
-for bx in 'next' 'bundle exec'
+# Run tests in order: Rails 2.3 first, then Rails 3.0
+for bx in 'bundle exec' 'next'
 do
   rm -f log/test.log
+
+  # Reinstall gems before each test run to ensure correct versions
+  if [ "$bx" = "next" ]; then
+    next bundle install
+  else
+    bundle install
+  fi
 
   # Undike for rails 6.1+
   #$bx rails zeitwerk:check

@@ -832,20 +832,57 @@ class Wf::Filter < ActiveRecord::Base
     @results ||= begin
       handle_empty_filter!
       if custom_conditions?
-        recs = model_class.find(:all, :conditions => sql_conditions, :joins => joins, :order => order_clause)
+        recs = find_with_conditions(sql_conditions, joins, order_clause)
         recs = process_custom_conditions(recs)
         recs = recs.paginate(:page => page, :per_page => per_page)
       else
-        recs = model_class.paginate(:order => order_clause, :page => page, :per_page => per_page, :conditions => sql_conditions, :joins => joins)
+        recs = paginate_with_conditions(sql_conditions, joins, order_clause, page, per_page)
       end
       recs.wf_filter = self
       recs
     end
   end
 
+  # Rails 2.3 vs 3.0 compatibility: find with conditions
+  def find_with_conditions(conditions, joins, order)
+    if rails_3_0_or_later?
+      scope = model_class
+      scope = scope.where(conditions) if conditions
+      scope = scope.joins(joins) if joins
+      scope = scope.order(order) if order
+      scope.all
+    else
+      model_class.all(:conditions => conditions, :joins => joins, :order => order)
+    end
+  end
+
+  # Rails 2.3 vs 3.0 compatibility: paginate with conditions
+  def paginate_with_conditions(conditions, joins, order, page, per_page)
+    if rails_3_0_or_later?
+      scope = model_class
+      scope = scope.where(conditions) if conditions
+      scope = scope.joins(joins) if joins
+      scope = scope.order(order) if order
+      scope.paginate(:page => page, :per_page => per_page)
+    else
+      model_class.paginate(:order => order, :page => page, :per_page => per_page, :conditions => conditions, :joins => joins)
+    end
+  end
+
+  # Check if we're running on Rails 3.0 or later
+  def rails_3_0_or_later?
+    defined?(ActiveRecord::VERSION) && ActiveRecord::VERSION::MAJOR >= 3
+  end
+
   # sums up the column for the given conditions
   def sum(column_name)
-    model_class.sum(column_name, :conditions => sql_conditions)
+    if rails_3_0_or_later?
+      scope = model_class
+      scope = scope.where(sql_conditions) if sql_conditions
+      scope.sum(column_name)
+    else
+      model_class.sum(column_name, :conditions => sql_conditions)
+    end
   end
 
 end

@@ -31,6 +31,7 @@ if next?
   # Rails 3.0 dependencies
   gem 'rails', '~> 3.0.0'
   gem 'dynamic_form'                  # For error_messages_for helper
+  gem 'will_paginate', '3.0.0'        # Rails 3.0 compatible version
 else
   # Rails LTS sources for free Community plan
   git 'https://github.com/makandra/rails.git', :branch => '2-3-lts' do
@@ -42,6 +43,7 @@ else
     gem 'activesupport',    :require => false
     gem 'railties',         :require => false
   end
+  gem 'will_paginate', '~> 2.3.0'     # Rails 2.3 compatible version
 end
 
 group :development, :test do

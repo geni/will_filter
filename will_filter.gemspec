@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
 
   gem.add_dependency 'rails' # specific version in Gemfile
-  gem.add_dependency 'will_paginate'
+  gem.add_dependency 'will_paginate' # specific version in Gemfile
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
