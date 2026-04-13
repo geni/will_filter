@@ -67,11 +67,33 @@ module Rails
         require 'initializer'
       rescue LoadError
         # If initializer doesn't exist, we're on Rails 3+
+        # Patch Rails 3.0 gem files for Ruby 2.7+ compatibility before requiring rails
+        patch_rails_30_for_ruby_27
+
         require 'rails'
 
-        # Load Ruby 2.7 compatibility patches for Rails 3.0 before it loads problematic files
+        # Load Ruby 2.7 compatibility patches for Rails 3.0 after rails loads
         rails_30_compat = File.expand_path('../../lib/core_ext/rails_30_ruby_27_compat', __FILE__)
         require rails_30_compat if File.exist?("#{rails_30_compat}.rb")
+      end
+    end
+
+    def patch_rails_30_for_ruby_27
+      # Find Rails 3.0 activesupport gem
+      if defined?(Gem)
+        gem_spec = Gem.loaded_specs.values.find { |spec| spec.name == 'activesupport' && spec.version.to_s.start_with?('3.0.') }
+        return unless gem_spec
+
+        timezone_file = File.join(gem_spec.full_gem_path, 'lib/active_support/values/time_zone.rb')
+        return unless File.exist?(timezone_file)
+
+        content = File.read(timezone_file)
+
+        # Fix: def parse(str, now=now) - circular argument reference (syntax error in Ruby 2.7+)
+        if content.include?('def parse(str, now=now)')
+          content.gsub!(/def parse\(str, now=now\)/, "def parse(str, now=nil)\n      now ||= self.now")
+          File.write(timezone_file, content)
+        end
       end
     end
 

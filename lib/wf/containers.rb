@@ -21,5 +21,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Load railtie for Rails 3.0+
-require 'will_filter/railtie' if defined?(Rails::Railtie)
+# Container namespace for filter containers
+module Wf
+  module Containers
+  end
+end

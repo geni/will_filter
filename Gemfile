@@ -31,7 +31,6 @@ if next?
   # Rails 3.0 dependencies
   gem 'rails', '~> 3.0.0'
   gem 'dynamic_form'                  # For error_messages_for helper
-  gem 'rails_xss'                     # Gradual XSS protection migration
 else
   # Rails LTS sources for free Community plan
   git 'https://github.com/makandra/rails.git', :branch => '2-3-lts' do
