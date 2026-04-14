@@ -21,19 +21,21 @@ export TEST_OPTS="--verbose --no-show-detail-immediately --stop-on-failure"
 
 # In case claude made changes to gems
 rm -rf vendor/bundle
-bundle install
-next bundle install
 
-# Run tests in order: Rails 2.3 first, then Rails 3.0
-for bx in 'bundle exec' 'next'
+# Run tests in order: Rails 3.0 first, then Rails 3.1
+for run in 'current' 'next'
 do
   rm -f log/test.log
 
   # Reinstall gems before each test run to ensure correct versions
-  if [ "$bx" = "next" ]; then
-    next bundle install
-  else
+  if [ "$run" = "next" ]; then
+    export BUNDLE_GEMFILE=Gemfile.next
     bundle install
+    bx="bundle exec"
+  else
+    unset BUNDLE_GEMFILE
+    bundle _1.17.3_ install
+    bx="bundle _1.17.3_ exec"
   fi
 
   # Undike for rails 6.1+
