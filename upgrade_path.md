@@ -35,8 +35,16 @@ next_rails --init
 # disable colorized output
 export NO_COLOR=1
 
-claude "upgrade this gem to <next version>. make sure claude_test.sh passes"
+claude "upgrade this gem to rails <next version>. make sure claude_test.sh passes"
+
+# commit changes
 ```
+
+## Remove old code
+Use the following prompt to remove the old code:
+``
+now remove the old code so its only rails <next version> compatible and make sure test_my_app.sh passes
+``
 
 
 

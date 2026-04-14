@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Rails 3.0.20 requires bundler ~> 1.0, so use bundler 1.17.3
+# Rails 3.1 requires bundler ~> 1.0, so use bundler 1.17.3
 BUNDLER="bundle _1.17.3_"
 
 $BUNDLER config --local build.sqlite3 "--enable-system-libraries"

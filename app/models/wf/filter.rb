@@ -31,45 +31,28 @@ class Wf::Filter < ActiveRecord::Base
   #############################################################################
   # Basics
   #############################################################################
-  def initialize(*args, &block)
-    # Handle various calling conventions:
-    # - initialize(ModelClass) - legacy
-    # - initialize() - Rails 3.0/3.1 with no args
-    # - initialize(attributes_hash) - Rails 3.0
-    # - initialize(attributes_hash, options) - Rails 3.1
-
-    attributes = args.first
-    options = args[1] || {}
-
-    # Detect if first arg is model_class (legacy) or attributes (Rails 3.0+)
+  def initialize(attributes = nil, options = {})
+    # Handle legacy calling convention: initialize(ModelClass)
+    # vs Rails 3.1: initialize(attributes_hash, options)
     if attributes.is_a?(Class) || (attributes.is_a?(String) && attributes =~ /^[A-Z]/)
       # Legacy call: initialize(ModelClass)
       model_class = attributes
       attributes = nil
     elsif attributes.is_a?(Hash)
-      # Rails 3.0+ call: initialize(attributes_hash)
+      # Rails 3.1 call: initialize(attributes_hash, options)
       model_class = attributes.delete(:model_class) if attributes
     else
       model_class = nil
     end
 
-    # Call super with appropriate args based on Rails version
-    if args.length > 1
-      super(attributes, options, &block)
-    elsif args.length == 1 && !model_class
-      super(attributes, &block)
-    else
-      super(&block)
-    end
+    super(attributes, options)
 
     if model_class
       self.model_class_name = model_class.to_s
-
     elsif self.class.name =~ /(.+)Filter/
       model_class = $1.constantize rescue nil
       raise "Cannot determine model class for #{name}!" if model_class.nil?
       self.model_class_name = model_class.to_s
-
     else
       raise "Cannot determine model class for #{name}!"
     end
