@@ -33,5 +33,5 @@ Rails.configuration.after_initialize do
       end
   end
   
-  ApplicationHelper.send(:include, Wf::HelperMethods)
+  ApplicationHelper.send(:include, WillFilter::HelperMethods)
 end

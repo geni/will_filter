@@ -21,17 +21,30 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Include hook code here
+class WillFilter::Containers::Numeric < WillFilter::FilterContainer
 
-Rails.configuration.after_initialize do
-  
-  ["lib/core_ext/**",
-   "lib/wf",
-   "lib/wf/containers"].each do |dir|
-      Dir[File.expand_path("#{File.dirname(__FILE__)}/../#{dir}/*.rb")].sort.each do |file|
-        require_or_load file
-      end
+  def self.operators
+    [:is, :is_not, :is_less_than, :is_greater_than]
   end
-  
-  ApplicationHelper.send(:include, WillFilter::HelperMethods)
+
+  def template_name
+    'text'
+  end
+
+  def numeric_value
+    value.to_i
+  end
+
+  def validate
+    return "Value must be provided" if value.blank?
+    return "Value must be numeric" unless is_numeric?(value)
+  end
+
+  def sql_condition
+    return [" #{condition.full_key} = ? ",   numeric_value]    if operator == :is
+    return [" #{condition.full_key} <> ? ",  numeric_value]    if operator == :is_not
+    return [" #{condition.full_key} < ? ",   numeric_value]    if operator == :is_less_than
+    return [" #{condition.full_key} > ? ",   numeric_value]    if operator == :is_greater_than
+  end
+
 end

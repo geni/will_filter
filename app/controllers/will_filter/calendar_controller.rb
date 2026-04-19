@@ -21,17 +21,13 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Include hook code here
+require 'csv'
 
-Rails.configuration.after_initialize do
-  
-  ["lib/core_ext/**",
-   "lib/wf",
-   "lib/wf/containers"].each do |dir|
-      Dir[File.expand_path("#{File.dirname(__FILE__)}/../#{dir}/*.rb")].sort.each do |file|
-        require_or_load file
-      end
+class WillFilter::CalendarController < WillFilter::ApplicationController
+
+  def index
+    @calendar = WillFilter::Calendar.new(params[:wf_calendar_selected_date], params[:wf_calendar_start_date], params[:wf_calendar_show_time] == 'true', params[:wf_calendar_mode] || 'month')
+    render :layout => false
   end
   
-  ApplicationHelper.send(:include, WillFilter::HelperMethods)
 end

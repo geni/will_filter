@@ -17,5 +17,4 @@ Gemfile.lock
 Thumbs.db
 .tmp*
 tmp/
-test/dummy
 vendor

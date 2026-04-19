@@ -21,17 +21,26 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Include hook code here
+module WillFilter::CommonMethods
 
-Rails.configuration.after_initialize do
-  
-  ["lib/core_ext/**",
-   "lib/wf",
-   "lib/wf/containers"].each do |dir|
-      Dir[File.expand_path("#{File.dirname(__FILE__)}/../#{dir}/*.rb")].sort.each do |file|
-        require_or_load file
-      end
+  def self.included(base)
+    if 'ApplicationController' == base.name
+      base.append_before_filter :init_will_filter
+    end
   end
-  
-  ApplicationHelper.send(:include, WillFilter::HelperMethods)
+
+  def init_will_filter
+    # only if the filters need to be
+    return unless WillFilter::Config.user_filters_enabled?
+
+    wf_current_user = nil
+    begin
+      wf_current_user = eval(WillFilter::Config.current_user_method)
+    rescue Exception => ex
+      raise WillFilter::Exception.new("will_filter cannot be initialized because #{WillFilter::Config.current_user_method} failed with: #{ex.message}")
+    end
+
+    WillFilter::Config.init(wf_current_user)
+  end
+
 end

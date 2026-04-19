@@ -1,6 +1,6 @@
-require_relative '../../test_helper'
+require 'test_helper'
 
-class ObjectExtensionsTest < Test::Unit::TestCase
+class ObjectExtensionsTest < ActiveSupport::TestCase
 
   # There was an Array extension that I removed
   # because there was also an Object extension

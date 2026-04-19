@@ -21,17 +21,18 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Include hook code here
+class WillFilter::Containers::Boolean < WillFilter::FilterContainer
 
-Rails.configuration.after_initialize do
-  
-  ["lib/core_ext/**",
-   "lib/wf",
-   "lib/wf/containers"].each do |dir|
-      Dir[File.expand_path("#{File.dirname(__FILE__)}/../#{dir}/*.rb")].sort.each do |file|
-        require_or_load file
-      end
+  def self.operators
+    [:is]
+  end
+
+  def selected?
+    value == "1"
+  end
+
+  def sql_condition
+    return [" #{condition.full_key} = ? ", (selected? ? true : false)] if operator == :is
   end
   
-  ApplicationHelper.send(:include, WillFilter::HelperMethods)
 end

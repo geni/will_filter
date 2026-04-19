@@ -21,17 +21,33 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Include hook code here
+class WillFilter::Containers::List < WillFilter::FilterContainer
 
-Rails.configuration.after_initialize do
-  
-  ["lib/core_ext/**",
-   "lib/wf",
-   "lib/wf/containers"].each do |dir|
-      Dir[File.expand_path("#{File.dirname(__FILE__)}/../#{dir}/*.rb")].sort.each do |file|
-        require_or_load file
-      end
+  def self.operators
+    [:is, :is_not, :contains, :does_not_contain]
   end
-  
-  ApplicationHelper.send(:include, WillFilter::HelperMethods)
+
+  def options
+    opts = []
+    filter.value_options_for(condition.key).each do |item|
+      if item.is_a?(Array)
+        opt_name = item.first.to_s
+        opt_value = item.last.to_s
+      else
+        opt_name = item.to_s
+        opt_value = item.to_s
+      end
+      next if opt_name.strip == ""
+      opts << [ERB::Util.html_escape(opt_name), ERB::Util.html_escape(opt_value)]
+    end
+    opts
+  end
+
+  def sql_condition
+    return [" #{condition.full_key} = ? ", value]                if operator == :is
+    return [" #{condition.full_key} <> ? ", value]               if operator == :is_not
+    return [" #{condition.full_key} like ? ", "%#{value}%"]      if operator == :contains
+    return [" #{condition.full_key} not like ? ", "%#{value}%"]  if operator == :does_not_cotain
+  end
+
 end

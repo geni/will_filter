@@ -1,4 +1,4 @@
 module ApplicationHelper
-  include Wf::HelperMethods
-  
+  include WillFilter::HelperMethods
+
 end

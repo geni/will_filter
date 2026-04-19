@@ -21,5 +21,10 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Load railtie for Rails 3.0+
-require 'will_filter/railtie' if defined?(Rails::Railtie)
+# Load engine for Rails 3.1+
+if defined?(Rails::Engine)
+  require 'will_filter/engine'
+
+  # Alias Wf to WillFilter for backward compatibility
+  Wf = WillFilter unless defined?(Wf)
+end

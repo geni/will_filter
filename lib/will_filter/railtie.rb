@@ -28,7 +28,7 @@ if defined?(Rails::Railtie)
           require_or_load file
         end
 
-        ApplicationHelper.send(:include, Wf::HelperMethods)
+        ApplicationHelper.send(:include, WillFilter::HelperMethods)
       end
     end
   end

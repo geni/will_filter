@@ -21,7 +21,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-module Wf
+module WillFilter
   module ObjectExtensions
 
     def wf_filter=(filter)
@@ -33,6 +33,6 @@ module Wf
     end
 
   end # module ObjectExtensions
-end # module Wf
+end # module WillFilter
 
-Object.send(:include, Wf::ObjectExtensions)
+Object.send(:include, WillFilter::ObjectExtensions)

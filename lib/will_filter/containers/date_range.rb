@@ -21,17 +21,27 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Include hook code here
+class WillFilter::Containers::DateRange < WillFilter::FilterContainer
 
-Rails.configuration.after_initialize do
-  
-  ["lib/core_ext/**",
-   "lib/wf",
-   "lib/wf/containers"].each do |dir|
-      Dir[File.expand_path("#{File.dirname(__FILE__)}/../#{dir}/*.rb")].sort.each do |file|
-        require_or_load file
-      end
+  def self.operators
+    [:is_in_the_range]
+  end
+
+  def initialize(filter, criteria_key, operator, values)
+    super(filter, criteria_key, operator, values)
+    @start_date = values[0]
+    @end_date = values[1] if values.size > 1
+  end
+
+  def validate
+    return "Start value must be provided" if @start_date.blank?
+    return "Start value must be a valid date (2008-01-01)" if parse_date(@start_date) == nil
+    return "End value must be provided" if @end_date.blank?
+    return "End value must be a valid date (2008-01-01)" if parse_date(@end_date) == nil
+  end
+
+  def sql_condition
+    return [" (#{condition.full_key} >= ? and #{condition.full_key} <= ?) ", parse_date(@start_date), parse_date(@end_date)] if operator == :is_in_the_range
   end
   
-  ApplicationHelper.send(:include, WillFilter::HelperMethods)
 end

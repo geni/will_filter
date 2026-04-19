@@ -21,17 +21,37 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Include hook code here
+class WillFilter::Containers::FilterList < WillFilter::FilterContainer
 
-Rails.configuration.after_initialize do
-  
-  ["lib/core_ext/**",
-   "lib/wf",
-   "lib/wf/containers"].each do |dir|
-      Dir[File.expand_path("#{File.dirname(__FILE__)}/../#{dir}/*.rb")].sort.each do |file|
-        require_or_load file
-      end
+  def self.operators
+    [:is_filtered_by]
   end
-  
-  ApplicationHelper.send(:include, WillFilter::HelperMethods)
+
+  def validate
+    return "Value must be provided" if value.blank?
+  end
+
+  def template_name
+    'list'
+  end
+
+  def options
+    if condition.key == :id
+      model_class_name = filter.model_class_name
+    else
+      model_class_name = condition.key.to_s[0..-4].camelcase
+    end
+    
+    WillFilter::Filter.new(model_class_name).saved_filters(false)
+  end
+
+  def sql_condition
+    return nil unless operator == :is_filtered_by
+    sub_filter = WillFilter::Filter.find_by_id(value)
+    sub_conds = sub_filter.sql_conditions
+    sub_sql = "SELECT #{sub_filter.table_name}.id FROM #{sub_filter.table_name} WHERE #{sub_conds[0]}"
+    sub_conds[0] = " #{condition.full_key} IN (#{sub_sql}) "
+    sub_conds
+  end
+
 end

@@ -21,12 +21,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-module Wf
+module WillFilter
   module ActiveRecordBaseExtensions
 
     def filter(opts = {})
       if ActiveRecord::Base == self
-        raise Wf::FilterException.new("Cannot apply filter to the ActiveRecord::Base object")
+        raise WillFilter::FilterException.new("Cannot apply filter to the ActiveRecord::Base object")
       end
 
       params = opts[:params] || {}
@@ -38,13 +38,13 @@ module Wf
           else filter_class = opts[:filter]
         end
       else
-        filter_class = Wf::Filter
+        filter_class = WillFilter::Filter
       end
 
       filter_class.new(self).deserialize_from_params(params).results
     end
 
   end # module ActiveRecordBaseExtensions
-end # module Wf
+end # module WillFilter
 
-ActiveRecord::Base.send(:extend, Wf::ActiveRecordBaseExtensions)
+ActiveRecord::Base.send(:extend, WillFilter::ActiveRecordBaseExtensions)

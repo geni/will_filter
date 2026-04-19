@@ -21,17 +21,33 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-# Include hook code here
+class WillFilter::Containers::SingleDate < WillFilter::FilterContainer
 
-Rails.configuration.after_initialize do
-  
-  ["lib/core_ext/**",
-   "lib/wf",
-   "lib/wf/containers"].each do |dir|
-      Dir[File.expand_path("#{File.dirname(__FILE__)}/../#{dir}/*.rb")].sort.each do |file|
-        require_or_load file
-      end
+  def self.operators
+    [:is_on]
   end
-  
-  ApplicationHelper.send(:include, WillFilter::HelperMethods)
+
+  def template_name
+    'date'
+  end
+
+  def validate
+    return "Value must be provided" if value.blank?
+    return "Value must be a valid date (2008-01-01)" if start_date_time == nil
+  end
+
+  def start_date_time
+   parse_date(value).to_time
+  end
+
+  def end_date_time
+    (start_date_time + 1.day)
+  rescue ArgumentError
+    nil
+  end
+
+  def sql_condition
+    return [" #{condition.full_key} >= ? and #{condition.full_key} < ? ", start_date_time, end_date_time]  if operator == :is_on
+  end
+
 end
