@@ -14,3 +14,4 @@ $BUNDLER install
 
 rm -f db/test.sqlite3
 $BUNDLER exec rake test
+
