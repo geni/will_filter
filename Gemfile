@@ -1,23 +1,12 @@
 # frozen_string_literal: true
 
-
 source "http://rubygems.org"
-
-def next?
-  File.basename(__FILE__) == "Gemfile.next"
-end
 
 gemspec
 
 gem 'next_rails'
-
-if next?
-  gem 'rails', '~> 3.2.0'
-  gem 'sqlite3', '~> 1.3.5'
-else
-  gem 'rails', '~> 3.1.0'
-  gem 'sqlite3', '1.6.9'
-end
+gem 'rails', '~> 3.2.0'
+gem 'sqlite3', '~> 1.3.5'
 gem 'will_paginate', '~> 3.0.7'
 gem 'dynamic_form'                  # For error_messages_for helper
 

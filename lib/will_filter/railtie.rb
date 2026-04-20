@@ -3,18 +3,12 @@
 if defined?(Rails::Railtie)
   module WillFilter
     class Railtie < Rails::Railtie
-      # Load Arel compatibility patches early, before after_initialize
-      initializer "will_filter.load_arel_compat", :before => :load_config_initializers do
-        require File.expand_path('../../core_ext/arel_visitor_compat', __FILE__)
-      end
-
       config.after_initialize do
         # Load in correct order: core_ext, wf base files, then wf containers
         root = File.dirname(__FILE__) + "/../.."
 
-        # Load core extensions first (excluding arel_visitor_compat which was already loaded)
+        # Load core extensions first
         Dir[File.expand_path("#{root}/lib/core_ext/**/*.rb")].sort.each do |file|
-          next if file.include?('arel_visitor_compat')
           require_or_load file
         end
 
