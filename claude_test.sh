@@ -25,15 +25,17 @@ rm -rf vendor/bundle
 # Run tests in order: Rails 3.0 first, then Rails 3.1
 for run in 'current' 'next'
 do
+  echo "*** Testing ${run}..." && sleep 2
+
   rm -f log/test.log
 
   # Reinstall gems before each test run to ensure correct versions
   if [ "$run" = "next" ]; then
-    export BUNDLE_GEMFILE=Gemfile.next
-    bundle install
-    bx="bundle exec"
+#    export BUNDLE_GEMFILE=Gemfile.next
+    next bundle _1.17.3_ install
+    bx="next bundle _1.17.3_ exec"
   else
-    unset BUNDLE_GEMFILE
+#    unset BUNDLE_GEMFILE
     bundle _1.17.3_ install
     bx="bundle _1.17.3_ exec"
   fi

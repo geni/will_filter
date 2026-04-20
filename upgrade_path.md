@@ -1,5 +1,4 @@
 # Versions
-- 3.2 - ruby 2.7.8, Rails LTS
 - 4.0 - ruby >= 1.9.3
 - 4.1 - ruby >= 2.2.2
 - 4.2 - ruby 2.7.8, Rails LTS
@@ -28,14 +27,14 @@ git co -b <next version>
 next_rails --init
 
 # update Gemfile
-``
+
 
 ## Invoke claude
 ```sh
 # disable colorized output
 export NO_COLOR=1
 
-claude "upgrade this gem to rails <next version>. make sure claude_test.sh passes"
+claude "use next_Rails to upgrade this rails plugin to rails <next version>. make sure claude_test.sh passes"
 
 # commit changes
 ```
@@ -46,5 +45,7 @@ Use the following prompt to remove the old code:
 now remove the old code so its only rails <next version> compatible and make sure test_my_app.sh passes
 ``
 
+# Notes
 
+- [Rails Compatability Table](https://www.fastruby.io/blog/ruby/rails/versions/compatibility-table.html)
 

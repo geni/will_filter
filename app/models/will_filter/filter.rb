@@ -25,7 +25,11 @@ class WillFilter::Filter < ActiveRecord::Base
 
   JOIN_NAME_INDICATOR = '>'
 
+if NextRails.next?
+  self.table_name = 'wf_filters'
+else
   set_table_name :wf_filters
+end
   serialize   :data
 
   #############################################################################
