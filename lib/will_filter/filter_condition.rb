@@ -42,16 +42,16 @@ class WillFilter::FilterCondition
     container.serialize_to_params(params, index)
     params
   end
-  
+
   def full_key
     if key.to_s.index('.')
       parts = key.to_s.split(".")
       join_class = parts.first.camelcase.constantize
       return "#{join_class.table_name}.#{parts.last}"
-    end  
+    end
     "#{filter.table_name}.#{key}"
   end
-  
+
   def to_s
     key
   end

@@ -41,7 +41,7 @@ class WillFilter::Containers::FilterList < WillFilter::FilterContainer
     else
       model_class_name = condition.key.to_s[0..-4].camelcase
     end
-    
+
     WillFilter::Filter.new(model_class_name).saved_filters(false)
   end
 

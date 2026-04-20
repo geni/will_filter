@@ -37,7 +37,7 @@ class WillFilter::FilterContainer
   end
 
   def sanitized_value(index = 0)
-    return '' if index >= values.size 
+    return '' if index >= values.size
     return '' if values[index].blank?
     values[index].to_s.gsub("'", "&#39;")
   end
@@ -54,11 +54,11 @@ class WillFilter::FilterContainer
   def reset_values
     @values = []
   end
-  
+
   def template_name
     self.class.name.underscore.split('/').last
   end
-  
+
   def serialize_to_params(params, index)
     values.each_with_index do |v, v_index|
       params["wf_v#{index}_#{v_index}"] = v

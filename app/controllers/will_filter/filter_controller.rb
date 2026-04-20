@@ -65,16 +65,16 @@ class WillFilter::FilterController < WillFilter::ApplicationController
 
   def save_filter
     params.delete(:wf_id)
-    
+
     wf_filter = WillFilter::Filter.deserialize_from_params(params)
     wf_filter.validate!
-    
+
     unless wf_filter.errors?
       wf_filter.save
     end
-    
-    wf_filter.key= wf_filter.id.to_s 
-    
+
+    wf_filter.key= wf_filter.id.to_s
+
     render(:partial => '/will_filter/filter/conditions', :layout=>false, :locals => {:wf_filter => wf_filter})
   end
 
@@ -82,13 +82,13 @@ class WillFilter::FilterController < WillFilter::ApplicationController
     wf_filter = WillFilter::Filter.find_by_id(params.delete(:wf_id))
     wf_filter.deserialize_from_params(params)
     wf_filter.validate!
-    
+
     unless wf_filter.errors?
       wf_filter.save
     end
-    
-    wf_filter.key= wf_filter.id.to_s 
-    
+
+    wf_filter.key= wf_filter.id.to_s
+
     render(:partial => '/will_filter/filter/conditions', :layout=>false, :locals => {:wf_filter => wf_filter})
   end
 
@@ -100,7 +100,7 @@ class WillFilter::FilterController < WillFilter::ApplicationController
     wf_filter.id=nil
     wf_filter.key=nil
     wf_filter.remove_all
-    
+
     render(:partial => '/will_filter/filter/conditions', :layout=>false, :locals => {:wf_filter => wf_filter})
   end
 

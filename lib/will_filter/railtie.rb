@@ -19,12 +19,12 @@ if defined?(Rails::Railtie)
         end
 
         # Load wf base files (excluding containers directory)
-        Dir[File.expand_path("#{root}/lib/wf/*.rb")].sort.each do |file|
+        Dir[File.expand_path("#{root}/lib/will_filter/*.rb")].sort.each do |file|
           require_or_load file
         end
 
         # Load wf containers last
-        Dir[File.expand_path("#{root}/lib/wf/containers/*.rb")].sort.each do |file|
+        Dir[File.expand_path("#{root}/lib/will_filter/containers/*.rb")].sort.each do |file|
           require_or_load file
         end
 

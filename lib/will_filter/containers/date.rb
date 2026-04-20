@@ -42,5 +42,5 @@ class WillFilter::Containers::Date < WillFilter::FilterContainer
     return [" #{condition.full_key} > ? ",  date]  if operator == :is_after
     return [" #{condition.full_key} < ? ",  date]  if operator == :is_before
   end
-  
+
 end

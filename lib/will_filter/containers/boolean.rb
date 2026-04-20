@@ -34,5 +34,5 @@ class WillFilter::Containers::Boolean < WillFilter::FilterContainer
   def sql_condition
     return [" #{condition.full_key} = ? ", (selected? ? true : false)] if operator == :is
   end
-  
+
 end

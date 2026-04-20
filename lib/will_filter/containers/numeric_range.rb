@@ -54,5 +54,5 @@ class WillFilter::Containers::NumericRange < WillFilter::FilterContainer
   def sql_condition
     return [" (#{condition.full_key} >= ? and #{condition.full_key} <= ?) ", numeric_start_value, numeric_end_value] if operator == :is_in_the_range
   end
-  
+
 end

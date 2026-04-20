@@ -22,19 +22,19 @@
 #++
 
 class WillFilter::Config
-  
+
   def self.init(site_current_user)
     Thread.current[:current_user] = site_current_user
   end
-  
+
   def self.current_user
     Thread.current[:current_user]
   end
-  
+
   def self.reset!
     Thread.current[:current_user] = nil
   end
-  
+
   def self.load_yml(file_path)
     file = "#{Rails.root}/#{file_path}"
     file = "#{WillFilter::Engine.root}/#{file_path}" unless File.exist?(file)
@@ -96,7 +96,7 @@ class WillFilter::Config
   def self.user_class_name
     save_options[:user_class_name]
   end
-  
+
   def self.current_user_method
     save_options[:current_user_method]
   end

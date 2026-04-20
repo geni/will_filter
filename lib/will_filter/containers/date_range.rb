@@ -43,5 +43,5 @@ class WillFilter::Containers::DateRange < WillFilter::FilterContainer
   def sql_condition
     return [" (#{condition.full_key} >= ? and #{condition.full_key} <= ?) ", parse_date(@start_date), parse_date(@end_date)] if operator == :is_in_the_range
   end
-  
+
 end

@@ -1,13 +1,13 @@
 # Versions
-- 3.2 - ruby 2.2
+- 3.2 - ruby 2.7.8, Rails LTS
 - 4.0 - ruby >= 1.9.3
 - 4.1 - ruby >= 2.2.2
-- 4.2 - ruby >= 2.2.2
-- 5.0 - ruby >= 2.2.2
+- 4.2 - ruby 2.7.8, Rails LTS
+- 5.0 - ruby >= 2.2.2, ApplicationRecord
 - 5.1 - ruby >= 2.2.2
-- 5.2 - ruby >= 2.2.2
+- 5.2 - ruby 2.7.8, Rails LTS
 - 6.0 - ruby >= 2.5.0
-- 6.1 - ruby >= 2.5.0
+- 6.1 - ruby 2.7.8, Rails LTS
 - 7.0 - ruby >= 2.7.0
 - 7.1 - ruby >= 2.7.0
 - 7.2 - ruby >= 3.1.0

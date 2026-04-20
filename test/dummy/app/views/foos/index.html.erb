@@ -1,0 +1,22 @@
+<h1>Foos</h1>
+<%= will_filter(@foos) %>
+<%= will_paginate(@foos) %>
+<table border=1>
+  <tbody>
+    <tr>
+      <th>Id</th>
+      <th>Created At</th>
+      <th>Updated At</th>
+      <th>Name</th>
+    </tr>
+    <% @foos.each do |foo| %>
+      <tr>
+        <td><%= foo.id %></td>
+        <td><%= foo.created_at %></td>
+        <td><%= foo.updated_at %></td>
+        <td><%= foo.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate(@foos) %>

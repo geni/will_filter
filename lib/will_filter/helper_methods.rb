@@ -30,16 +30,16 @@ module WillFilter::HelperMethods
   def will_filter_scripts_tag
     render(:partial => "/will_filter/common/scripts")
   end
-  
+
   def will_filter_table_tag(results, opts = {})
     opts[:filtered] = true if opts[:filtered].nil?
-    
+
     if opts[:filtered]
       filter = results.wf_filter
       opts[:columns] ||= filter.model_column_keys
     else
       opts[:columns] ||= obj.attribute_names.sort
-    end  
+    end
 
     render(:partial => "/will_filter/common/results_table", :locals => {:results => results, :filter => filter, :opts => opts})
   end
@@ -59,5 +59,5 @@ module WillFilter::HelperMethods
     opts[:value_style]  ||= "text-align:left"
     render(:partial => "/will_filter/common/details_table", :locals => {:object => obj, :opts => opts})
   end
-  
+
 end
