@@ -13,7 +13,6 @@
 - 8.0 - ruby >= 3.2.0
 - 8.1 - ruby >= 3.2.0
 
-
 # Steps
 
 ## Create branch
