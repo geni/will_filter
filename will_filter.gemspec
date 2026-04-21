@@ -11,8 +11,8 @@ Gem::Specification.new do |gem|
   gem.homepage      = 'https://github.com/geni/will_filter'
   gem.license       = 'MIT'
 
-  gem.add_dependency 'rails' # specific version in Gemfile
-  gem.add_dependency 'will_paginate' # specific version in Gemfile
+  gem.add_dependency 'rails', '~> 3.1.0'
+  gem.add_dependency 'will_paginate', '~> 3.0.7'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

@@ -4,9 +4,8 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'rails', '~> 3.1.0'
-gem 'will_paginate', '~> 3.0.7'
-gem 'dynamic_form'                  # For error_messages_for helper
+gem 'will_paginate'
+gem 'dynamic_form' # For error_messages_for helper
 
 group :development, :test do
   gem 'method_source'
