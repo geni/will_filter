@@ -1,17 +1,22 @@
 #!/bin/sh
 
-# Rails 3.1 requires bundler ~> 1.0, so use bundler 1.17.3
-BUNDLER="bundle _1.17.3_"
+# Show which tests are being run and their results
+export TEST_OPTS="--verbose --no-show-detail-immediately"
+#export TEST_OPTS="--verbose --no-show-detail-immediately --stop-on-failure"
 
-$BUNDLER config --local build.sqlite3 "--enable-system-libraries"
-$BUNDLER config --local clean true
-$BUNDLER config --local path vendor/bundle
-$BUNDLER config --local without vscode
+bundle config --local build.sqlite3 "--enable-system-libraries"
+bundle config --local clean true
+bundle config --local path vendor/bundle
+bundle config --local without vscode
 
-# Bundler versions may change between builds
-rm Gemfile.lock
-$BUNDLER install
+# Only clean and reinstall if --no-clean is not specified
+if [[ "$*" != *--no-clean* ]]; then
+  git gc
 
-rm -f db/test.sqlite3
-$BUNDLER exec rake test
+  rm -rf Gemfile.lock vendor/bundle
+  bundle _1.17.3_ install
+fi
 
+rm -rf test/dummy/db/test.sqlite3 public/coverage
+RAILS_ENV=test bundle _1.17.3_ exec rake app:db:create app:db:migrate
+RAILS_ENV=test bundle _1.17.3_ exec rake test

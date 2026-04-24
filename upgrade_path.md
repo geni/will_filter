@@ -1,12 +1,12 @@
 # Versions
-- 4.0 - ruby >= 1.9.3
+- 4.0 - ruby >= 1.9.3, relation lambda syntax, before_action
 - 4.1 - ruby >= 2.2.2
-- 4.2 - ruby 2.7.8, Rails LTS
-- 5.0 - ruby >= 2.2.2, ApplicationRecord
+- 4.2 - ruby >= 2.2.2
+- 5.0 - ruby >= 2.2.2, ApplicationRecord, ApplicationMailer
 - 5.1 - ruby >= 2.2.2
-- 5.2 - ruby 2.7.8, Rails LTS
-- 6.0 - ruby >= 2.5.0
-- 6.1 - ruby 2.7.8, Rails LTS
+- 5.2 - ruby >= 2.2.2
+- 6.0 - ruby >= 2.5.0, update_attributes deprecated
+- 6.1 - ruby >= 2.5.0
 - 7.0 - ruby >= 2.7.0
 - 7.1 - ruby >= 2.7.0
 - 7.2 - ruby >= 3.1.0
@@ -23,20 +23,17 @@ git co -b <next version>
 
 ## Setup for dual boot
 ```sh
-next_rails --init
-
-# update Gemfile
-
+gem install --user-install --no-document next_rails
+```
 
 ## Invoke claude
 ```sh
 # disable colorized output
 export NO_COLOR=1
 
-claude "use next_Rails to upgrade this rails plugin to rails <next version>. make sure claude_test.sh passes"
-
-# commit changes
+claude "use next_rails to upgrade this rails plugin/gem to <next version>. make sure claude_test.sh passes"
 ```
+# Commit changes
 
 ## Remove old code
 Use the following prompt to remove the old code:
