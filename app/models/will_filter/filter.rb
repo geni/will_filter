@@ -681,13 +681,13 @@ class WillFilter::Filter < ActiveRecord::Base
         end
       end
 
-      user_filters = WillFilter::Filter.find(:all, :conditions => conditions)
+      user_filter_data = WillFilter::Filter.where(conditions).pluck(:name, :id)
 
-      if user_filters.size > 0
+      if user_filter_data.size > 0
         filters << ["-- Select Saved Filter --", "-2"] if include_default
 
-        user_filters.each do |filter|
-          filters << [filter.name, filter.id.to_s]
+        user_filter_data.each do |name, id|
+          filters << [name, id.to_s]
         end
       end
 
