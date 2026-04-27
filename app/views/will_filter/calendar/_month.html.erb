@@ -18,13 +18,13 @@
         <% 0.upto(6) do |i| %>
           <td style='text-align:center; vertical-align: middle;'>
             <% if current_date.wday == i and current_date <= calendar.end_date
-                today = (current_date==Date.today) ? 'today' : ''
-                selected = (current_date == calendar.selected_date.to_date and current_date!=Date.today) ? 'selected' : ''
-                selected = '' # for now
+                today = (current_date==Date.today) ? 'today' : String.new
+                selected = (current_date == calendar.selected_date.to_date and current_date!=Date.today) ? 'selected' : String.new
+                selected = String.new # for now
 
-                set_date = calendar.show_time? ? '' : 'wfCalendar.setDate();'
+                set_date = calendar.show_time? ? String.new : 'wfCalendar.setDate();'
             %>
-              <%= content_tag :div, :id => "wf_calendar_cell_#{current_date.year}_#{current_date.month}_#{current_date.day}", :class => "wf_calendar_date_cell #{today} #{selected}", :onClick => "wfCalendar.selectDateValue(this, '#{current_date}'); #{set_date}" do %>
+              <%= content_tag :div, :id => "wf_calendar_cell_#{current_date.year}_#{current_date.month}_#{current_date.day}", :class => ["wf_calendar_date_cell", today, selected].join(' '), :onClick => "wfCalendar.selectDateValue(this, '#{current_date}'); " + set_date do %>
                 <%= current_date.day %>
               <% end %>
               <% current_date += 1.day %>

@@ -22,12 +22,15 @@
 #++
 
 require 'csv'
+require 'will_paginate'
 
-class WillFilter::CalendarController < WillFilter::ApplicationController
+module WillFilter
+  class CalendarController < WillFilter::ApplicationController
 
-  def index
-    @calendar = WillFilter::Calendar.new(params[:wf_calendar_selected_date], params[:wf_calendar_start_date], params[:wf_calendar_show_time] == 'true', params[:wf_calendar_mode] || 'month')
-    render :layout => false
-  end
+    def index
+      @calendar = WillFilter::Calendar.new(params[:wf_calendar_selected_date], params[:wf_calendar_start_date], params[:wf_calendar_show_time] == 'true', params[:wf_calendar_mode] || 'month')
+      render :layout => false
+    end
 
-end
+  end # class CalendarController
+end # module WillFilter

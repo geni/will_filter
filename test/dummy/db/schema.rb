@@ -11,11 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20250515182061) do
+ActiveRecord::Schema.define(:version => 20250515182056) do
 
-  create_table "foos", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "things", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.string   "name",       :null => false
   end
 
@@ -25,8 +25,8 @@ ActiveRecord::Schema.define(:version => 20250515182061) do
     t.text     "data"
     t.integer  "user_id"
     t.string   "model_class_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   add_index "wf_filters", ["user_id"], :name => "index_wf_filters_on_user_id"

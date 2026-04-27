@@ -21,6 +21,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
+# Define the WillFilter module
+module WillFilter
+end
+
+# Load core files that need to be available early
+require 'will_filter/helper_methods' if defined?(Rails)
+require 'will_filter/common_methods' if defined?(Rails)
+
 # Load engine for Rails 3.1+
 if defined?(Rails::Engine)
   require 'will_filter/engine'

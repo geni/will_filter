@@ -62,7 +62,8 @@ var Wf = Wf || {
       theElement = theElement.offsetParent;
     }
     window.scrollTo(selectedPosX,selectedPosY);
-  }
+  },
+  mountPoint: '/will_filter'
 };
 
 /****************************************************************************
@@ -165,7 +166,7 @@ Wf.Filter.prototype = {
 		this.updateFilterConditions('add_condition', data_hash);
   },
 	updateFilterConditions: function(action, data_hash) {
-    Wf.Utils.update('wf_filter_conditions', '/will_filter/filter/' + action, {
+    Wf.Utils.update('wf_filter_conditions', `${Wf.mountPoint}/filter/${action}`, {
       parameters: data_hash,
       evalScripts: true,
       onComplete: function(transport) {
@@ -180,7 +181,7 @@ Wf.Filter.prototype = {
 	  this.showSpinner();
 	  var data_hash = Wf.Utils.serializeForm('wf_form');
 
-    Wf.Utils.update('wf_filter_conditions', '/will_filter/filter/load_filter', {
+    Wf.Utils.update('wf_filter_conditions', `${Wf.mountPoint}/filter/load_filter`, {
       parameters: data_hash,
       evalScripts: true,
       onComplete: function(transport) {
@@ -229,14 +230,13 @@ Wf.Calendar.prototype = {
     form_hash["wf_calendar_show_time"] = show_time;
 
     this.selected_field_id = fld_id;
-    Wf.Utils.update('wf_calendar', '/will_filter/calendar', {
+    Wf.Utils.update('wf_calendar', `${Wf.mountPoint}/calendar`, {
       parameters: form_hash,
       onComplete: function(transport) {
           var trigger_position = Wf.Utils.cumulativeOffset(wfCalendar.trigger);
           var calendar_container = Wf.element("wf_calendar");
           calendar_container.style.left = (trigger_position[0] - 237) + "px";
           calendar_container.style.top = trigger_position[1] + "px";
-          calendar_container.style.width = "230px";
           Wf.Effects.appear("wf_calendar");
       }
     });
@@ -254,7 +254,7 @@ Wf.Calendar.prototype = {
     if (mode == 'annual')
       form_hash["wf_calendar_start_date"] = Wf.value("wf_calendar_year") + "-01-01";
 
-    Wf.Utils.update('wf_calendar', '/will_filter/calendar', {
+    Wf.Utils.update('wf_calendar', `${Wf.mountPoint}/calendar`, {
       parameters: form_hash,
       onComplete: function(transport) {
           var trigger_position = Wf.Utils.cumulativeOffset(wfCalendar.trigger);
@@ -273,7 +273,7 @@ Wf.Calendar.prototype = {
 		else
 			form_hash["wf_calendar_start_date"] = start_date;
 
-	  Wf.Utils.update('wf_calendar', '/will_filter/calendar', {
+	  Wf.Utils.update('wf_calendar', `${Wf.mountPoint}/calendar`, {
 	    parameters: form_hash
 	  });
 	},
@@ -335,7 +335,7 @@ Wf.Exporter = function(options) {
 
 Wf.Exporter.prototype = {
 	show: function (trigger) {
-	  Wf.Utils.update('wf_exporter', '/will_filter/exporter', {
+	  Wf.Utils.update('wf_exporter', `${Wf.mountPoint}/exporter`, {
 	    parameters: Wf.Utils.serializeForm('wf_form'),
 	    onComplete: function(transport) {
           var trigger_position = Wf.Utils.cumulativeOffset(trigger);
@@ -397,7 +397,7 @@ Wf.Exporter.prototype = {
     }
 
     Wf.element('wf_export_format').value = Wf.value('wf_export_format_selector');
-    Wf.element('wf_form').action = '/will_filter/exporter/export';
+    Wf.element('wf_form').action = `${Wf.mountPoint}/exporter/export`;
     Wf.submit('wf_form');
   }
 };
@@ -414,10 +414,8 @@ Wf.Utils = {
     useCapture = useCapture || false;
     if (elm.addEventListener) {
       elm.addEventListener(evType, fn, useCapture);
-      return true;
     } else if (elm.attachEvent) {
-      var r = elm.attachEvent('on' + evType, fn);
-      return r;
+      elm.attachEvent('on' + evType, fn);
     } else {
       elm['on' + evType] = fn;
     }
@@ -557,12 +555,14 @@ var wfFilter = null;
 var wfCalendar = null;
 var wfExporter = null;
 
-function initializeWillFilter() {
+function initializeWillFilter(mountPoint) {
   var setup = function() {
     wfFilter = new Wf.Filter();
     wfCalendar = new Wf.Calendar();
     wfExporter = new Wf.Exporter();
   }
+
+  Wf.mountPoint = mountPoint;
 
   Wf.Utils.addEvent(window,'load',setup);
 }

@@ -32,8 +32,8 @@ class Object
   end
 end
 
-require_relative '../config/environment'
-require 'will_paginate'
+require File.expand_path("../dummy/config/environment.rb",  __FILE__)
+require "rails/test_help"
 
 # create database tables
 # In Rails 2.3, we need to require migrations manually
@@ -44,5 +44,16 @@ if defined?(ActiveRecord::VERSION) && ActiveRecord::VERSION::MAJOR < 3
   end
 end
 
-ActiveRecord::Migration.verbose = true
-ActiveRecord::Migrator.migrate("db/migrate/")
+module WillFilter
+  class ControllerTest < ActionController::TestCase
+    include Engine.routes.url_helpers
+
+    def setup
+      @routes = WillFilter::Engine.routes
+    end
+
+  end
+end
+
+#ActiveRecord::Migration.verbose = true
+#ActiveRecord::Migrator.migrate("db/migrate/")

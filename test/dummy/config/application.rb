@@ -2,6 +2,14 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
+# Load Arel compatibility patches for Rails 3.2 after Rails is loaded
+rails_31_arel_compat = File.expand_path('../../../../lib/core_ext/rails_31_arel_compat', __FILE__)
+require rails_31_arel_compat if File.exist?("#{rails_31_arel_compat}.rb")
+
+# Load Rails 3.2 + Ruby 2.7 compatibility patches after Rails is loaded
+rails_32_ruby_27_compat = File.expand_path('../../../../lib/core_ext/rails_32_ruby_27_compat', __FILE__)
+require rails_32_ruby_27_compat if File.exist?("#{rails_32_ruby_27_compat}.rb")
+
 Bundler.require
 require "will_filter"
 

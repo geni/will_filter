@@ -23,93 +23,95 @@
 
 require 'csv'
 
-class WillFilter::ExporterController < WillFilter::ApplicationController
+module WillFilter
+  class ExporterController < WillFilter::ApplicationController
 
-  def index
-    @wf_filter = WillFilter::Filter.deserialize_from_params(params)
-    render :layout => false
-  end
-
-  def export
-    params[:page] = 1
-    params[:per_page] = 10000 # mas export limit
-
-    @wf_filter = WillFilter::Filter.deserialize_from_params(params)
-
-    if @wf_filter.custom_format?
-      send_data(@wf_filter.process_custom_format, :type => 'text', :charset => 'utf-8')
-      return
+    def index
+      @wf_filter = WillFilter::Filter.deserialize_from_params(params)
+      render :layout => false
     end
 
-    unless @wf_filter.valid_format?
-      render :text => "The export format is not supported (#{@wf_filter.format})"
-      return
+    def export
+      params[:page] = 1
+      params[:per_page] = 10000 # mas export limit
+
+      @wf_filter = WillFilter::Filter.deserialize_from_params(params)
+
+      if @wf_filter.custom_format?
+        send_data(@wf_filter.process_custom_format, :type => 'text', :charset => 'utf-8')
+        return
+      end
+
+      unless @wf_filter.valid_format?
+        render :text => "The export format is not supported (#{@wf_filter.format})"
+        return
+      end
+
+      if @wf_filter.format == :xml
+        return send_xml_data(@wf_filter)
+      end
+
+      if @wf_filter.format == :json
+        return send_json_data(@wf_filter)
+      end
+
+      if @wf_filter.format == :csv
+        return send_csv_data(@wf_filter)
+      end
+
+      render :layout => false
     end
 
-    if @wf_filter.format == :xml
-      return send_xml_data(@wf_filter)
-    end
+  private
 
-    if @wf_filter.format == :json
-      return send_json_data(@wf_filter)
-    end
+    def send_xml_data(wf_filter)
+      class_name = wf_filter.model_class_name.underscore
 
-    if @wf_filter.format == :csv
-      return send_csv_data(@wf_filter)
-    end
-
-    render :layout => false
-  end
-
-private
-
-  def send_xml_data(wf_filter)
-    class_name = wf_filter.model_class_name.underscore
-
-    result = ""
-    xml = Builder::XmlMarkup.new(:target => result, :indent => 1)
-    xml.instruct!
-    xml.tag!(class_name.pluralize) do
-      wf_filter.results.each do |obj|
-        xml.tag!(class_name.underscore) do
-          wf_filter.fields.each do |field|
-            xml.tag!(field.to_s, obj.send(field).to_s)
+      result = ""
+      xml = Builder::XmlMarkup.new(:target => result, :indent => 1)
+      xml.instruct!
+      xml.tag!(class_name.pluralize) do
+        wf_filter.results.each do |obj|
+          xml.tag!(class_name.underscore) do
+            wf_filter.fields.each do |field|
+              xml.tag!(field.to_s, obj.send(field).to_s)
+            end
           end
         end
       end
+
+      send_data(result, :type => 'text/xml', :charset => 'utf-8')
     end
 
-    send_data(result, :type => 'text/xml', :charset => 'utf-8')
-  end
+    def send_json_data(wf_filter)
+      result = []
 
-  def send_json_data(wf_filter)
-    result = []
-
-    wf_filter.results.each do |obj|
-      hash = {}
-      wf_filter.fields.each do |field|
-        hash[field] = obj.send(field).to_s
-      end
-      result << hash
-    end
-
-    send_data(result.to_json, :type => 'text', :charset => 'utf-8')
-  end
-
-  def send_csv_data(wf_filter)
-    csv_string = CSV.generate do |csv|
-      csv << wf_filter.fields
       wf_filter.results.each do |obj|
-        row = []
+        hash = {}
         wf_filter.fields.each do |field|
-          row << obj.send(field).to_s
+          hash[field] = obj.send(field).to_s
         end
-        csv << row
+        result << hash
       end
+
+      send_data(result.to_json, :type => 'text', :charset => 'utf-8')
     end
 
-    send_data csv_string, :type => 'text/csv; charset=utf-8; header=present', :charset => 'utf-8',
-                          :disposition => "attachment; filename=results.csv"
-  end
+    def send_csv_data(wf_filter)
+      csv_string = CSV.generate do |csv|
+        csv << wf_filter.fields
+        wf_filter.results.each do |obj|
+          row = []
+          wf_filter.fields.each do |field|
+            row << obj.send(field).to_s
+          end
+          csv << row
+        end
+      end
 
+      send_data csv_string, :type => 'text/csv; charset=utf-8; header=present', :charset => 'utf-8',
+                            :disposition => "attachment; filename=results.csv"
+    end
+
+  end
 end

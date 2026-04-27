@@ -1,5 +1,7 @@
-Foo.destroy_all
+puts 'Removing old tings...'
+Thing.destroy_all
 
-Foo.create!(:name => 'one')
-Foo.create!(:name => 'two')
-Foo.create!(:name => 'three')
+puts 'Adding new things...'
+Thing.create!(:name => 'one')
+Thing.create!(:name => 'two')
+Thing.create!(:name => 'three')

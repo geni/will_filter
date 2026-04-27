@@ -3,6 +3,11 @@ module WillFilter
   class Engine < ::Rails::Engine
     isolate_namespace WillFilter
 
+    # Configure asset paths for the engine
+#    initializer "will_filter.assets" do |app|
+#      app.config.assets.paths << root.join("app", "assets")
+#    end
+
     config.after_initialize do
       # Load in correct order: core_ext, will_filter base files, then containers
       root = File.dirname(__FILE__) + "/../.."

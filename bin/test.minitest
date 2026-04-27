@@ -8,7 +8,7 @@ base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 log_file = "#{base_dir}/log/test.log"
 File.delete(log_file) if File.exist?(log_file)
 
-$SKIP_COVERAGE = true
+ENV['SKIP_COVERAGE'] = 'true'
 $LOAD_PATH.push base_dir
 
 arg_path, arg_line = ARGV[0].split(':')

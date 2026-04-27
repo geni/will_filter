@@ -1,3 +1,4 @@
+# frozen_string_literal: false
 #--
 # Copyright (c) 2010 Michael Berkovich, Geni Inc
 #

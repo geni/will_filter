@@ -1,5 +1,5 @@
 Dummy::Application.routes.draw do
-  mount WillFilter::Engine => '/will_filter'
+  mount WillFilter::Engine => '/wf'
 
-  root :to => 'foos#index'
+  root :to => 'things#index'
 end

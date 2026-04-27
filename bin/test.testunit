@@ -11,8 +11,11 @@ test_dir = "#{base_dir}/test"
 log_file = "#{base_dir}/log/test.log"
 File.delete(log_file) if File.exist?(log_file)
 
-$SKIP_COVERAGE = true
+ENV['SKIP_COVERAGE'] = 'true'
 $LOAD_PATH.push base_dir
+
+# make require 'test_helper' work (like Rails 8)
+$LOAD_PATH.push test_dir
 
 arg_path, arg_line = ARGV[0].split(':')
 
