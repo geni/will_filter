@@ -180,7 +180,11 @@ class Wf::Filter < ActiveRecord::Base
       operators[:is_filtered_by] = :filter_list
     elsif "_id" == name[-3..-1]
       begin
-        name[0..-4].camelcase.constantize
+        # The line below was written in 2009 and appears to just be enforcing that column
+        # names that end in "_id" refer to actual classes.  This breaks for classes like
+        # Foo::Collection (with column name collection_id) and it's just nonsensical for
+        # columns like "external_id" which never rever to a class called External.
+        #name[0..-4].camelcase.constantize
         operators[:is_filtered_by] = :filter_list
       rescue
       end
