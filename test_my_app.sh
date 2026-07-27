@@ -7,5 +7,5 @@ bundle config --local without vscode
 
 bundle install
 
-rm db/test.sqlite3
+rm -rf db/test.sqlite3
 bundle exec rake test
